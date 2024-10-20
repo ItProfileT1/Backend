@@ -1,7 +1,7 @@
 package com.it.backend.controller;
 
 import com.it.backend.dto.NameAndDescriptionDto;
-import com.it.backend.service.RoleService;
+import com.it.backend.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,18 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/roles")
-public class RoleConfigurationController {
+@RequestMapping("api/v1/positions")
+public class PositionController {
 
-    private final RoleService roleService;
+    private final PositionService positionService;
 
     @PostMapping("new")
-    public void createRole(@RequestBody NameAndDescriptionDto dto){
-        roleService.createRole(dto);
+    public void createPosition(@RequestBody NameAndDescriptionDto dto){
+        positionService.createPosition(dto);
     }
 
-    public void getAllRoles(){}
-
     @PostMapping("hard_skills")
-    public void addHardSkillsToRole(){}
+    public void addHardSkillsToPosition(){}
 }

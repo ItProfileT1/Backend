@@ -1,4 +1,4 @@
-package com.it.backend;
+package com.it.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "roles", schema = "it_profile")
-public class Role {
+@Table(name = "positions", schema = "it_profile")
+public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
