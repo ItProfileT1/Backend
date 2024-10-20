@@ -15,7 +15,7 @@ public class SpecialistController {
 
     private final SpecialistService specialistService;
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<Long> createSpecialist(@RequestBody SpecialistDto specialistDto){
         var specialistId = specialistService.createSpecialist(specialistDto);
         return specialistId.map(aLong -> ResponseEntity
