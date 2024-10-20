@@ -59,20 +59,40 @@ class SpecialistServiceTest {
     }
 
     @Test
-    void getSpecialistById_existing_returnsOptionalOfSpecialistDto(){
+    void getSpecialistDtoById_existing_returnsOptionalOfSpecialistDto(){
         //when
         when(specialistRepository.findById(id)).thenReturn(Optional.of(new Specialist()));
-        var result = specialistService.getSpecialistById(id);
+        var result = specialistService.getSpecialistDtoById(id);
         //then
         assertNotNull(result);
         assertTrue(result.isPresent());
+        assertEquals(SpecialistDto.class, result.get().getClass());
     }
     @Test
-    void getSpecialistById_notExisting_returnsOptionalEmpty(){
+    void getSpecialistDtoById_notExisting_returnsOptionalEmpty(){
         //when
         when(specialistRepository.findById(id)).thenReturn(Optional.empty());
-        var result = specialistService.getSpecialistById(id);
+        var result = specialistService.getSpecialistDtoById(id);
         //then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getSpecialistById_existing_returnsOptionalOfSpecialist(){
+        when(specialistRepository.findById(id)).thenReturn(Optional.of(new Specialist()));
+        var result = specialistService.getSpecialistById(id);
+
+        assertNotNull(result);
+        assertTrue(result.isPresent());
+        assertEquals(Specialist.class, result.get().getClass());
+    }
+
+    @Test
+    void getSpecialistById_notExisting_returnsOptionalEmpty(){
+        when(specialistRepository.findById(id)).thenReturn(Optional.empty());
+        var result = specialistService.getSpecialistById(id);
+
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }

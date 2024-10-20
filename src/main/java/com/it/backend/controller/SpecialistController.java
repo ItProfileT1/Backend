@@ -25,7 +25,7 @@ public class SpecialistController {
 
     @GetMapping("{id}")
     public ResponseEntity<SpecialistDto> getSpecialist(@PathVariable Long id){
-        var specialist = specialistService.getSpecialistById(id);
+        var specialist = specialistService.getSpecialistDtoById(id);
         return specialist.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest()
                 .build());

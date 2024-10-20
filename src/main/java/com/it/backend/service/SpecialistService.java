@@ -37,9 +37,13 @@ public class SpecialistService {
         return Optional.of(specialistRepository.save(specialist).getId());
     }
 
-    public Optional<SpecialistDto> getSpecialistById(Long id) {
+    public Optional<SpecialistDto> getSpecialistDtoById(Long id) {
         var specialist = specialistRepository.findById(id);
         return specialist.map(this::castToDto);
+    }
+
+    public Optional<Specialist> getSpecialistById(Long id){
+        return specialistRepository.findById(id);
     }
 
 
