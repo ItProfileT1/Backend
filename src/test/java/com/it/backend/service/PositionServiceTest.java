@@ -110,4 +110,30 @@ class PositionServiceTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    void getById_existing_returnsOptionalOfIdNameDescriptionDto(){
+        //given
+        Long id = 1L;
+        Position position = new Position();
+        //when
+        when(positionRepository.findById(id)).thenReturn(Optional.of(position));
+        var result = positionService.getById(1L);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isPresent());
+        assertEquals(IdNameDescriptionDto.class, result.get().getClass());
+    }
+
+    @Test
+    void getById_notExisting_returnsOptionalEmpty(){
+        //given
+        Long id = 1L;
+        //when
+        when(positionRepository.findById(id)).thenReturn(Optional.empty());
+        var result = positionService.getById(1L);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
 }

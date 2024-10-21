@@ -53,4 +53,9 @@ public class PositionService {
             return Optional.empty();
         return Optional.of(castToDto(position));
     }
+
+    public Optional<IdNameDescriptionDto> getById(Long id){
+        var optionalPosition = positionRepository.findById(id);
+        return optionalPosition.map(this::castToDto);
+    }
 }

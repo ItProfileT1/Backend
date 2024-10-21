@@ -31,6 +31,11 @@ public class PositionController {
                         .build());
     }
 
-//    @PostMapping("hard_skills")
-//    public void addHardSkillsToPosition(){}
+    @GetMapping("{id}")
+    public ResponseEntity<IdNameDescriptionDto> getPositionById(@PathVariable Long id){
+        var dto = positionService.getBySpecialistId(id);
+        return dto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest()
+                        .build());
+    }
 }
