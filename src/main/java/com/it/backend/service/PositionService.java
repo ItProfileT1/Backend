@@ -31,11 +31,13 @@ public class PositionService {
         var specialist = specialistRepository.findById(dto.id());
         if (specialist.isEmpty())
             return Optional.empty();
+        var mySpecialist = specialist.get();
+        if (mySpecialist.getPosition() != null)
+            return Optional.empty();
         var position = new Position();
         position.setName(dto.name());
         position.setDescription(dto.description());
         position = positionRepository.save(position);
-        var mySpecialist = specialist.get();
         mySpecialist.setPosition(position);
         specialistRepository.save(mySpecialist);
         return Optional.of(position.getId());
