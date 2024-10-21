@@ -4,10 +4,7 @@ import com.it.backend.dto.IdNameDescriptionDto;
 import com.it.backend.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -24,6 +21,14 @@ public class PositionController {
         return positionId.map(aLong -> ResponseEntity
                 .created(URI.create("api/v1/positions/" + positionId.get()))
                 .body(aLong)).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @GetMapping("specialist/{id}")
+    public ResponseEntity<IdNameDescriptionDto> getPositionBySpecialistId(@PathVariable Long id){
+        var dto = positionService.getBySpecialistId(id);
+        return dto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest()
+                        .build());
     }
 
 //    @PostMapping("hard_skills")
