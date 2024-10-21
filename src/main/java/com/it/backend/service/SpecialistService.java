@@ -42,9 +42,4 @@ public class SpecialistService {
         return specialist.map(this::castToDto);
     }
 
-    public Optional<Specialist> getSpecialistById(Long id){
-        return specialistRepository.findById(id);
-    }
-
-
 }
