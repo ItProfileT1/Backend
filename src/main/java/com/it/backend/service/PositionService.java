@@ -24,7 +24,8 @@ public class PositionService {
         var position = new Position();
         position.setName(dto.name());
         position.setDescription(dto.description());
-        positionRepository.save(position);
+        position = positionRepository.save(position);
+        //перепроверить работоспособность
         var mySpecialist = specialist.get();
         mySpecialist.setPosition(position);
         specialistRepository.save(mySpecialist);
