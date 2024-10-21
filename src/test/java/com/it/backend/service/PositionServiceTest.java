@@ -57,4 +57,57 @@ class PositionServiceTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
+    @Test
+    void createPosition_forNotExistingSpecialistHavingExistingPosition_ReturnsOptionalEmpty() {
+        //given
+        IdNameDescriptionDto dto = mock(IdNameDescriptionDto.class);
+        Specialist specialist = new Specialist();
+        specialist.setPosition(mock(Position.class));
+        //when
+        when(specialistRepository.findById(dto.id())).thenReturn(Optional.of(specialist));
+        var result = positionService.createPosition(dto);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getBySpecialistId_existing_returnsOptionalOfIdNameDescriptionDto(){
+        //given
+        Long id = 1L;
+        var specialist = new Specialist();
+        specialist.setPosition(mock(Position.class));
+        //when
+        when(specialistRepository.findById(id)).thenReturn(Optional.of(specialist));
+        var result = positionService.getBySpecialistId(1L);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isPresent());
+        assertEquals(IdNameDescriptionDto.class, result.get().getClass());
+    }
+
+    @Test
+    void getBySpecialistId_notExisting_returnsOptionalEmpty(){
+        //given
+        Long id = 1L;
+        var specialist = new Specialist();
+        //when
+        when(specialistRepository.findById(id)).thenReturn(Optional.of(specialist));
+        var result = positionService.getBySpecialistId(1L);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getBySpecialistId_forNotExistingSpecialist_returnsOptionalEmpty(){
+        //given
+        Long id = 1L;
+        //when
+        when(specialistRepository.findById(id)).thenReturn(Optional.empty());
+        var result = positionService.getBySpecialistId(1L);
+        //then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
 }
