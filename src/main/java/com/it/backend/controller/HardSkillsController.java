@@ -1,13 +1,11 @@
 package com.it.backend.controller;
 
 import com.it.backend.dto.NameDescriptionDto;
+import com.it.backend.dto.StringDto;
 import com.it.backend.service.HardSkillsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -20,9 +18,15 @@ public class HardSkillsController {
 
     @PostMapping
     public ResponseEntity<Long> createSHardSkill(@RequestBody NameDescriptionDto dto){
-        var positionId = hardSkillsService.createHardSkill(dto);
-        return positionId.map(aLong -> ResponseEntity
-                .created(URI.create("api/v1/positions/" + positionId.get()))
+        var hardSkillId = hardSkillsService.createHardSkill(dto);
+        return hardSkillId.map(aLong -> ResponseEntity
+                .created(URI.create("api/v1/hard_skills/" + hardSkillId.get()))
                 .body(aLong)).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @PostMapping("{positionId}")
+    public ResponseEntity<Object> attachHardSkillToPosition(@PathVariable Long positionId, @RequestBody StringDto hardSkillNameDto){
+        var ok = hardSkillsService.attachToPosition(positionId, hardSkillNameDto);
+        return ok.map(aLong -> ResponseEntity.ok().build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
