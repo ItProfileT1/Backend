@@ -1,6 +1,5 @@
 package com.it.backend.service;
 
-import com.it.backend.dto.IdNameDescriptionDto;
 import com.it.backend.entity.Position;
 import com.it.backend.entity.Specialist;
 import com.it.backend.repository.PositionRepository;

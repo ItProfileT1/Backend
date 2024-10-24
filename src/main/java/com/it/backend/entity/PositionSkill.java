@@ -9,19 +9,22 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "positions_hard_skills", schema = "it_profile")
-public class PositionsHardSkills {
+@Table(name = "positions_skills", schema = "it_profile")
+public class PositionSkill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hard_skill_id")
-    private HardSkill hardSkill;
+    @ManyToOne
+    @JoinColumn(name = "skill_id")
+    private Skill skill;
 
+    @ManyToOne
+    @JoinColumn(name = "min_level_id")
+    private SkillLevel minSkillLevel;
 }

@@ -11,8 +11,8 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "positions", schema = "it_profile")
-public class Position {
+@Table(name = "skill_levels", schema = "it_profile")
+public class SkillLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,13 +21,12 @@ public class Position {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "numeric_value", nullable = false)
+    private int numericValue;
 
-    @OneToMany(mappedBy = "position")
-    private Set<Specialist> specialists;
+    @OneToMany(mappedBy = "minSkillLevel")
+    private Set<PositionSkill> levelPositionsSkills;
 
-    @OneToMany(mappedBy = "position")
-    private Set<PositionSkill> positionSkillsLevels;
-
+    @OneToMany(mappedBy = "skillLevel")
+    private Set<SpecialistSkill> levelSpecialistsSkills;
 }

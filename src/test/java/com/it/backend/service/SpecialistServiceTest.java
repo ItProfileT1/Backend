@@ -1,6 +1,6 @@
 package com.it.backend.service;
 
-import com.it.backend.dto.SpecialistDto;
+import com.it.backend.dto.request.SpecialistRequest;
 import com.it.backend.entity.Specialist;
 import com.it.backend.repository.SpecialistRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class SpecialistServiceTest {
     @InjectMocks
     SpecialistService specialistService;
 
-    SpecialistDto specialistDto;
+    SpecialistRequest specialistRequest;
     Long id;
     Specialist specialist;
 
@@ -33,7 +33,7 @@ class SpecialistServiceTest {
         id = 1L;
         specialist = new Specialist();
         specialist.setId(id);
-        specialistDto = new SpecialistDto("John Smith", "18.08.1999", "male", "Moscow");
+        specialistRequest = new SpecialistRequest("John Smith", "18.08.1999", "male", "Moscow");
     }
 
     @Test
@@ -41,7 +41,7 @@ class SpecialistServiceTest {
         //when
         when(specialistRepository.existsByFio("John Smith")).thenReturn(false);
         when(specialistRepository.save(any(Specialist.class))).thenReturn(specialist);
-        var result = specialistService.createSpecialist(specialistDto);
+        var result = specialistService.createSpecialist(specialistRequest);
         //then
         assertNotNull(result);
         assertTrue(result.isPresent());
@@ -52,7 +52,7 @@ class SpecialistServiceTest {
     void createSpecialist_existing_returnsOptionalEmpty() {
         //when
         when(specialistRepository.existsByFio("John Smith")).thenReturn(true);
-        var result = specialistService.createSpecialist(specialistDto);
+        var result = specialistService.createSpecialist(specialistRequest);
         //then
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -66,7 +66,7 @@ class SpecialistServiceTest {
         //then
         assertNotNull(result);
         assertTrue(result.isPresent());
-        assertEquals(SpecialistDto.class, result.get().getClass());
+        assertEquals(SpecialistRequest.class, result.get().getClass());
     }
     @Test
     void getSpecialistDtoById_notExisting_returnsOptionalEmpty(){
