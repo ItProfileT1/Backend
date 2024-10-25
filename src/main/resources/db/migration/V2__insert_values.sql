@@ -4,4 +4,4 @@ insert into roles (name)
 values ('ROLE_ADMIN'), ('ROLE_USER');
 
 insert into users(username, password, role_id)
-values ('admin', 'ag17iWkzhGrMCsgzXG0l8hUwToFC5HPsn_QK2m3x3nE', '1')
+values ('admin', '$2a$10$olLZfxwgaD1N9e4GIDoBIe6tQgu80Sphyg.kqSzum3VISvMOhwlxS', '1')
