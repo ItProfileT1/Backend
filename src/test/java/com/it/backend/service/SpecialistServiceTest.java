@@ -1,8 +1,6 @@
 package com.it.backend.service;
 
-import com.it.backend.dto.request.SpecialistRequest;
 import com.it.backend.entity.Specialist;
-import com.it.backend.repository.SpecialistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

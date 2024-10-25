@@ -2,7 +2,6 @@ package com.it.backend.service;
 
 import com.it.backend.entity.Skill;
 import com.it.backend.entity.Position;
-import com.it.backend.repository.SkillRepository;
 import com.it.backend.repository.PositionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
