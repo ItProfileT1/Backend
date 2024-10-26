@@ -27,7 +27,7 @@ create table if not exists specialists(
                                           surname varchar(255) not null,
                                           name varchar(255) not null,
                                           patronymic varchar(255) not null,
-                                          birthday date not null,
+                                          birthday date,
                                           sex varchar(255) not null,
                                           city varchar(255) not null
 );
