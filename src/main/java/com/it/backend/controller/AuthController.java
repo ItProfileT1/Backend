@@ -15,16 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/auth")
 public class AuthController {
+    //TODO назвать таблицы связки в бд 1:1 например вместо positions_skills -> position_skills
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("sign-up")
     public JwtAuthenticationResponse signUp(@RequestBody @Validated SignUpRequest request) {
+        //TODO сделать обработку ошибок (пользователь с таким юзернеймом уже существует)
         return authenticationService.signUp(request);
     }
 
     @PostMapping("sign-in")
     public JwtAuthenticationResponse signIn(@RequestBody @Validated SignInRequest request) {
+        //TODO сделать обработку ошибок (неверный юзернейм или пароль)
         return authenticationService.signIn(request);
     }
 }

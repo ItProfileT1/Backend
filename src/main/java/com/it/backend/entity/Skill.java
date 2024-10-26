@@ -32,8 +32,9 @@ public class Skill {
     @JoinColumn(name = "category_id")
     private SkillCategory skillCategory;
 
-    @OneToMany(mappedBy = "skill") // интеграция
+    @OneToMany(mappedBy = "skill") // TODO интеграция
     private Set<SpecialistSkill> skillSpecialistsLevels;
+    //TODO тут стоит назвать specialistSkills
 
     @OneToMany(mappedBy = "skill")
     private Set<AssessorSkillRate> skillRates;

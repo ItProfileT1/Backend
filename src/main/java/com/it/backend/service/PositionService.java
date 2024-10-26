@@ -9,6 +9,9 @@ import com.it.backend.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class PositionService {
@@ -18,6 +21,7 @@ public class PositionService {
     public PositionResponse createPosition(PositionRequest request) {
         Position position = PositionMapper.INSTANCE.toPosition(request);
         if (positionRepository.existsByName(position.getName())) {
+            //TODO сделать обработку ошибки в случае если должность уже существует
         }
         return PositionMapper.INSTANCE.toPositionResponse(positionRepository.save(position));
     }
@@ -26,6 +30,15 @@ public class PositionService {
         Position position = positionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
         return PositionMapper.INSTANCE.toPositionResponse(position);
+    }
+
+    public Set<PositionResponse> findAllPositions() {
+        Iterable<Position> positions = positionRepository.findAll();
+        Set<PositionResponse> positionResponses = new HashSet<>();
+        for (Position position : positions) {
+            positionResponses.add(PositionMapper.INSTANCE.toPositionResponse(position));
+        }
+        return positionResponses;
     }
 
     public PositionResponse updatePosition(Long id, PositionRequest request) {
