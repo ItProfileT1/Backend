@@ -1,8 +1,8 @@
 package com.it.backend.controller;
 
-import com.it.backend.dto.JwtAuthenticationResponse;
-import com.it.backend.dto.SignInRequest;
-import com.it.backend.dto.SignUpRequest;
+import com.it.backend.dto.response.JwtAuthenticationResponse;
+import com.it.backend.dto.request.SignInRequest;
+import com.it.backend.dto.request.SignUpRequest;
 import com.it.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
