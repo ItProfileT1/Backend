@@ -35,13 +35,13 @@ public class PositionController {
         return positionService.updatePosition(id, request);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/skills")
+    @PostMapping("{id}/skills")
     public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
         return positionSkillService.addSkills(id, request);
     }
