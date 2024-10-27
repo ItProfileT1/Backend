@@ -16,9 +16,7 @@ import com.it.backend.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +25,7 @@ public class PositionSkillService {
     private final PositionRepository positionRepository;
     private final SkillRepository skillRepository;
     private final SkillLevelRepository skillLevelRepository;
+    private final PositionService positionService;
 
     public Set<PositionSkillResponse> addSkills(Long id, PositionSkillsRequest request) {
         Position position = positionRepository.findById(id).orElseThrow(
@@ -40,10 +39,21 @@ public class PositionSkillService {
                     () -> new EntityNotFoundException("skill_level.not.found", subRequest.skillId())
             );
             if (positionSkillRepository.existsByPositionAndSkillAndMinSkillLevel(position, skill, skillLevel)) {
+            //TODO сделать обработку ошибки
             }
             PositionSkill positionSkill = PositionSkillMapper.INSTANCE.toPositionSkill(position, skill, skillLevel);
             newPositionSkills.add(positionSkill);
         }
         return PositionSkillMapper.INSTANCE.toPositionSkillSetResponse(positionSkillRepository.saveAll(newPositionSkills));
+    }
+
+    public Set<Skill> findSkillsByPosition(Position position) {
+        Set<Skill> skills = new HashSet<>();
+        for (PositionSkill positionSkill : positionService.findAllPositionSkillsByPosition(position)) {
+            var skill = positionSkill.getSkill();
+            if (skill != null)
+                skills.add(positionSkill.getSkill());
+        }
+        return skills;
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -29,7 +29,7 @@ public class Specialist {
     private String patronymic;
 
     @Column(name = "birthday")
-    private Date birthday;
+    private LocalDate birthday;
 
     @Column(name = "sex")
     private String sex;
@@ -37,8 +37,13 @@ public class Specialist {
     @Column(name = "city")
     private String city;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "specialist")
     private Set<SpecialistSkill> specialistSkillsLevels;
+    //TODO тут стоит назвать specialistSkills
 
     @OneToMany(mappedBy = "assessee")
     private Set<AssessmentProcess> assessmentProcesses;
@@ -47,7 +52,7 @@ public class Specialist {
     private Set<AssessorSkillRate> assessorSkillRates;
 
     @ManyToOne
-    @JoinColumn(name = "position_id", nullable = false)
+    @JoinColumn(name = "position_id")
     private Position position;
 
 }

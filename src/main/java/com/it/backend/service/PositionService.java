@@ -3,6 +3,7 @@ package com.it.backend.service;
 import com.it.backend.dto.request.PositionRequest;
 import com.it.backend.dto.response.PositionResponse;
 import com.it.backend.entity.Position;
+import com.it.backend.entity.PositionSkill;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionMapper;
 import com.it.backend.repository.PositionRepository;
@@ -50,5 +51,9 @@ public class PositionService {
 
     public void deletePosition(Long id) {
         positionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
+    }
+
+    public Set<PositionSkill> findAllPositionSkillsByPosition(Position position){
+        return position.getPositionSkillsLevels();
     }
 }

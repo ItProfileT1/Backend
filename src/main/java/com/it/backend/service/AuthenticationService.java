@@ -19,15 +19,14 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RoleService roleService;
 
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
+    public Long signUp(SignUpRequest request) {
         var user = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .role(roleService.getByName("ROLE_USER"))
                 .build();
         userService.create(user);
-        var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        return user.getId();
     }
 
     public JwtAuthenticationResponse signIn(SignInRequest request){
