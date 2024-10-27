@@ -1,10 +1,12 @@
 package com.it.backend.controller;
 
+import com.it.backend.dto.response.IdResponse;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
 import com.it.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +22,10 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("sign-up")
-    public JwtAuthenticationResponse signUp(@RequestBody @Validated SignUpRequest request) {
+    public ResponseEntity<IdResponse> signUpUser(@RequestBody @Validated SignUpRequest request) {
         //TODO сделать обработку ошибок (пользователь с таким юзернеймом уже существует)
-        return authenticationService.signUp(request);
+        var id = authenticationService.signUp(request);
+        return ResponseEntity.ok(new IdResponse(id));
     }
 
     @PostMapping("sign-in")
