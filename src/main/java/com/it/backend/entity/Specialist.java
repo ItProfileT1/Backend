@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -16,19 +19,40 @@ public class Specialist {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id")
-    private Position position;
+    @Column(name = "surname")
+    private String surname;
 
-    @Column(name = "fio")
-    private String fio;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "patronymic")
+    private String patronymic;
 
     @Column(name = "birthday")
-    private String birthday;
+    private LocalDate birthday;
 
     @Column(name = "sex")
     private String sex;
 
     @Column(name = "city")
     private String city;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "specialist")
+    private Set<SpecialistSkill> specialistSkillsLevels;
+    //TODO тут стоит назвать specialistSkills
+
+    @OneToMany(mappedBy = "assessee")
+    private Set<AssessmentProcess> assessmentProcesses;
+
+    @OneToMany(mappedBy = "assessor")
+    private Set<AssessorSkillRate> assessorSkillRates;
+
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
+
 }

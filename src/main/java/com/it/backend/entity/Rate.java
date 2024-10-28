@@ -11,23 +11,20 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "positions", schema = "it_profile")
-public class Position {
+@Table(name = "rates", schema = "it_profile")
+public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "position")
-    private Set<Specialist> specialists;
+    @ManyToOne
+    @JoinColumn(name = "scale_id")
+    private RateScale rateScale;
 
-    @OneToMany(mappedBy = "position")
-    private Set<PositionSkill> positionSkillsLevels;
-
+    @OneToMany(mappedBy = "rate")
+    private Set<AssessorSkillRate> rateUsages;
 }

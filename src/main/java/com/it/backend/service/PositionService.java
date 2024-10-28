@@ -1,14 +1,17 @@
 package com.it.backend.service;
 
+import com.it.backend.dto.request.PositionRequest;
+import com.it.backend.dto.response.PositionResponse;
 import com.it.backend.entity.Position;
-import com.it.backend.dto.IdNameDescriptionDto;
+import com.it.backend.entity.PositionSkill;
+import com.it.backend.exception.entity.EntityNotFoundException;
+import com.it.backend.mapper.PositionMapper;
 import com.it.backend.repository.PositionRepository;
-import com.it.backend.repository.SpecialistRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -16,46 +19,45 @@ public class PositionService {
 
     private final PositionRepository positionRepository;
 
-    private final SpecialistRepository specialistRepository;
-
-    private IdNameDescriptionDto castToDto(Position position){
-        return new IdNameDescriptionDto(
-                position.getId(),
-                position.getName(),
-                position.getDescription()
-        );
+    public PositionResponse createPosition(PositionRequest request) {
+        Position position = PositionMapper.INSTANCE.toPosition(request);
+        if (positionRepository.existsByName(position.getName())) {
+            //TODO сделать обработку ошибки в случае если должность уже существует
+        }
+        return PositionMapper.INSTANCE.toPositionResponse(positionRepository.save(position));
     }
 
-    @Transactional
-    public Optional<Long> createPosition(IdNameDescriptionDto dto){
-        var specialist = specialistRepository.findById(dto.id());
-        if (specialist.isEmpty())
-            return Optional.empty();
-        var mySpecialist = specialist.get();
-        if (mySpecialist.getPosition() != null)
-            return Optional.empty();
-        var position = new Position();
-        position.setName(dto.name());
-        position.setDescription(dto.description());
-        position = positionRepository.save(position);
-        mySpecialist.setPosition(position);
-        specialistRepository.save(mySpecialist);
-        return Optional.of(position.getId());
+    public PositionResponse findPositionById(Long id) {
+        var position = findById(id);
+        return PositionMapper.INSTANCE.toPositionResponse(position);
     }
 
-    public Optional<IdNameDescriptionDto> getBySpecialistId(Long id){
-        var optionalSpecialist = specialistRepository.findById(id);
-        if (optionalSpecialist.isEmpty())
-            return Optional.empty();
-        var specialist = optionalSpecialist.get();
-        var position = specialist.getPosition();
-        if (position == null)
-            return Optional.empty();
-        return Optional.of(castToDto(position));
+    public Position findById(Long id){
+        return positionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
     }
 
-    public Optional<IdNameDescriptionDto> getById(Long id){
-        var optionalPosition = positionRepository.findById(id);
-        return optionalPosition.map(this::castToDto);
+    public Set<PositionResponse> findAllPositions() {
+        Iterable<Position> positions = positionRepository.findAll();
+        Set<PositionResponse> positionResponses = new HashSet<>();
+        for (Position position : positions) {
+            positionResponses.add(PositionMapper.INSTANCE.toPositionResponse(position));
+        }
+        return positionResponses;
+    }
+
+    public PositionResponse updatePosition(Long id, PositionRequest request) {
+        Position position = positionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
+        PositionMapper.INSTANCE.updatePosition(request, position);
+        return PositionMapper.INSTANCE.toPositionResponse(positionRepository.save(position));
+    }
+
+    public void deletePosition(Long id) {
+        positionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
+    }
+
+    public Set<PositionSkill> findAllPositionSkillsByPosition(Position position){
+        return position.getPositionSkillsLevels();
     }
 }

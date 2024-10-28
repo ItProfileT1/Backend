@@ -1,12 +1,11 @@
 package com.it.backend.controller;
 
-import com.it.backend.dto.SpecialistDto;
+import com.it.backend.dto.request.ProfileRequest;
+import com.it.backend.dto.request.ProfileResponse;
 import com.it.backend.service.SpecialistService;
+import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,20 +13,15 @@ import java.net.URI;
 public class SpecialistController {
 
     private final SpecialistService specialistService;
+    private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<Long> createSpecialist(@RequestBody SpecialistDto specialistDto){
-        var specialistId = specialistService.createSpecialist(specialistDto);
-        return specialistId.map(aLong -> ResponseEntity
-                .created(URI.create("api/v1/specialists/" + specialistId.get()))
-                .body(aLong)).orElseGet(() -> ResponseEntity.badRequest().build());
+    @PostMapping("profile")
+    public ProfileResponse createProfile(@RequestBody ProfileRequest request){
+        return specialistService.createProfile(request, userService.getCurrentUser());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<SpecialistDto> getSpecialist(@PathVariable Long id){
-        var specialist = specialistService.getSpecialistDtoById(id);
-        return specialist.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest()
-                .build());
+    @GetMapping("profile")
+    public ProfileResponse findProfile(){
+        return specialistService.getProfileByUser(userService.getCurrentUser());
     }
 }

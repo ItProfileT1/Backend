@@ -5,21 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "hard_skills", schema = "it_profile")
-public class HardSkill {
+@Table(name = "skill_types", schema = "it_profile")
+public class SkillType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
-    private String description;
+    @OneToMany(mappedBy = "type")
+    private Set<Skill> skills;
 
 }

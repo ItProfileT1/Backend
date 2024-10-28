@@ -1,12 +1,16 @@
 package com.it.backend.controller;
 
-import com.it.backend.dto.IdNameDescriptionDto;
+import com.it.backend.dto.request.PositionRequest;
+import com.it.backend.dto.request.PositionSkillsRequest;
+import com.it.backend.dto.response.PositionResponse;
+import com.it.backend.dto.response.PositionSkillResponse;
 import com.it.backend.service.PositionService;
+import com.it.backend.service.PositionSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,28 +18,38 @@ import java.net.URI;
 public class PositionController {
 
     private final PositionService positionService;
+    private final PositionSkillService positionSkillService;
 
     @PostMapping
-    public ResponseEntity<Long> createPosition(@RequestBody IdNameDescriptionDto dto){
-        var positionId = positionService.createPosition(dto);
-        return positionId.map(aLong -> ResponseEntity
-                .created(URI.create("api/v1/positions/" + positionId.get()))
-                .body(aLong)).orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    @GetMapping("specialist/{id}")
-    public ResponseEntity<IdNameDescriptionDto> getPositionBySpecialistId(@PathVariable Long id){
-        var dto = positionService.getBySpecialistId(id);
-        return dto.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest()
-                        .build());
+    public PositionResponse createPosition(@RequestBody PositionRequest request) {
+        return positionService.createPosition(request);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<IdNameDescriptionDto> getPositionById(@PathVariable Long id){
-        var dto = positionService.getBySpecialistId(id);
-        return dto.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest()
-                        .build());
+    public PositionResponse findPositionById(@PathVariable Long id) {
+        return positionService.findPositionById(id);
+    }
+
+    @GetMapping()
+    public Set<PositionResponse> findAllPositions(){
+        return positionService.findAllPositions();
+    }
+
+    @PostMapping("{id}")
+    public PositionResponse updatePosition(@PathVariable Long id, @RequestBody PositionRequest request) {
+        return positionService.updatePosition(id, request);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
+        positionService.deletePosition(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("{id}/skills")
+    public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
+        //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
+        return positionSkillService.addSkills(id, request);
+        //TODO Метод возвращает один скилл а должен список скиллов прикрепленных к позции
     }
 }
