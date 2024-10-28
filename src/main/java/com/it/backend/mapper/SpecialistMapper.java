@@ -2,12 +2,16 @@ package com.it.backend.mapper;
 
 import com.it.backend.dto.request.ProfileRequest;
 import com.it.backend.dto.request.ProfileResponse;
+import com.it.backend.dto.response.PositionResponse;
+import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.Specialist;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
+
+import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = PositionMapper.class)
 public interface SpecialistMapper {
@@ -20,10 +24,11 @@ public interface SpecialistMapper {
     @Mapping(target = "position", ignore = true)
     //TODO specialistSkillsLevels заменить на specialistSkills
     @Mapping(target = "specialistSkillsLevels", ignore = true)
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Specialist toSpecialist(ProfileRequest profileRequest);
 
-    //@Mapping(source = "position", target = "positionResponse")
-    //TODO сделать нормальный маппинг positionResponse и skillsResponses
-    ProfileResponse toProfileResponse(Specialist specialist);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "positionResponse", source = "positionResponse")
+    @Mapping(target = "skillResponses", source = "skillResponses")
+    @Mapping(source = "specialist.name", target = "name")
+    ProfileResponse toProfileResponse(Specialist specialist, PositionResponse positionResponse, Set<SkillResponse> skillResponses);
 }

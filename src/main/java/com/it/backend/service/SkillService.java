@@ -13,6 +13,7 @@ public class SkillService {
     private final SkillRepository skillRepository;
 
     public Skill findById(Long id){
-        return skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("skill.not.found", id));
+        return skillRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("skill.not.found", id));
     }
 }

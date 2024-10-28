@@ -28,9 +28,13 @@ public class PositionService {
     }
 
     public PositionResponse findPositionById(Long id) {
-        Position position = positionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
+        var position = findById(id);
         return PositionMapper.INSTANCE.toPositionResponse(position);
+    }
+
+    public Position findById(Long id){
+        return positionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
     }
 
     public Set<PositionResponse> findAllPositions() {

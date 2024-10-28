@@ -13,6 +13,7 @@ public class SkillLevelService {
     private final SkillLevelRepository skillLevelRepository;
 
     public SkillLevel findByNumericValue(Integer value){
-        return skillLevelRepository.findByNumericValue(value).orElseThrow(() -> new EntityNotFoundException("skill.not.found", 0L));
+        return skillLevelRepository.findByNumericValue(value)
+                .orElseThrow(() -> new EntityNotFoundException("skill.not.found", 0L));
     }
 }

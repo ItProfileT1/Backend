@@ -49,4 +49,15 @@ public class SpecialistSkillService {
                 }));
         return specialistSkills;
     }
+
+    public Set<Skill> getSkillsBySpecialist(Specialist specialist) {
+        Set<Skill> skills = new HashSet<>();
+        for (SpecialistSkill specialistSkillsLevel : specialist.getSpecialistSkillsLevels()) {
+            var skill = specialistSkillsLevel.getSkill();
+            if (skill != null){
+                skills.add(skill);
+            }
+        }
+        return skills;
+    }
 }
