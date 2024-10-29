@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("api/v1/auth/sign-in").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "api/v1/positions/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "api/v1/positions/**", "api/v1/skills/**").authenticated()
                                 .requestMatchers("api/v1/auth/sign-up", "api/v1/positions/**").hasRole("ADMIN")
                                 .requestMatchers("api/v1/specialists/profile").hasRole("USER")
                                 .anyRequest().authenticated())

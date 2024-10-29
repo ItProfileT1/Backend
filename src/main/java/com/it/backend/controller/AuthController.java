@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("sign-up")
-    @Operation(summary = "Регистрация пользователя")
+    @Operation(summary = "Регистрация пользователя, доступно только администратору")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<IdResponse> signUpUser(@RequestBody @Validated SignUpRequest request) {
         //TODO сделать обработку ошибок (пользователь с таким юзернеймом уже существует)
