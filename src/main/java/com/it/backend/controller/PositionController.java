@@ -6,8 +6,10 @@ import com.it.backend.dto.response.PositionResponse;
 import com.it.backend.dto.response.PositionSkillResponse;
 import com.it.backend.service.PositionService;
 import com.it.backend.service.PositionSkillService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -31,6 +33,8 @@ public class PositionController {
     }
 
     @GetMapping()
+    @Operation(summary = "Получение всех должностей")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Set<PositionResponse> findAllPositions(){
         return positionService.findAllPositions();
     }
