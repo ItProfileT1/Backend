@@ -3,10 +3,10 @@ package com.it.backend.service;
 import com.it.backend.dto.request.PositionSkillRequest;
 import com.it.backend.dto.request.PositionSkillsRequest;
 import com.it.backend.dto.response.PositionSkillResponse;
+import com.it.backend.entity.Level;
 import com.it.backend.entity.Position;
 import com.it.backend.entity.PositionSkill;
 import com.it.backend.entity.Skill;
-import com.it.backend.entity.SkillLevel;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionSkillMapper;
 import com.it.backend.repository.PositionRepository;
@@ -35,13 +35,13 @@ public class PositionSkillService {
             Skill skill = skillRepository.findById(subRequest.skillId()).orElseThrow(
                     () -> new EntityNotFoundException("skill.not.found", subRequest.skillId())
             );
-            SkillLevel skillLevel = skillLevelRepository.findById(subRequest.minLevelId()).orElseThrow(
-                    () -> new EntityNotFoundException("skill_level.not.found", subRequest.skillId())
+            Level level = skillLevelRepository.findById(subRequest.minLevelId()).orElseThrow(
+                    () -> new EntityNotFoundException("level.not.found", subRequest.skillId())
             );
-            if (positionSkillRepository.existsByPositionAndSkillAndMinSkillLevel(position, skill, skillLevel)) {
+            if (positionSkillRepository.existsByPositionAndSkillAndMinLevel(position, skill, level)) {
             //TODO сделать обработку ошибки
             }
-            PositionSkill positionSkill = PositionSkillMapper.INSTANCE.toPositionSkill(position, skill, skillLevel);
+            PositionSkill positionSkill = PositionSkillMapper.INSTANCE.toPositionSkill(position, skill, level);
             newPositionSkills.add(positionSkill);
         }
         return PositionSkillMapper.INSTANCE.toPositionSkillSetResponse(positionSkillRepository.saveAll(newPositionSkills));

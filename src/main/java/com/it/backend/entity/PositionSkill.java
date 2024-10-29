@@ -26,5 +26,5 @@ public class PositionSkill {
 
     @ManyToOne
     @JoinColumn(name = "min_level_id")
-    private SkillLevel minSkillLevel;
+    private Level minLevel;
 }

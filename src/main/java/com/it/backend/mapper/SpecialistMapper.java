@@ -20,7 +20,6 @@ public interface SpecialistMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "assessmentProcesses", ignore = true)
-    @Mapping(target = "assessorSkillRates", ignore = true)
     @Mapping(target = "position", ignore = true)
     //TODO specialistSkillsLevels заменить на specialistSkills
     @Mapping(target = "specialistSkillsLevels", ignore = true)

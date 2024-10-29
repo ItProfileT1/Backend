@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -32,6 +33,15 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "creator")
+    private Set<AssessmentProcess> assessmentProcesses;
+
+    @OneToMany(mappedBy = "assessor")
+    private Set<AssessorSkillRate> assessorSkillRates;
+
+    @OneToMany(mappedBy = "assessor")
+    private Set<AssessmentProcessAssessorStatus> assessmentProcessAssessorStatuses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

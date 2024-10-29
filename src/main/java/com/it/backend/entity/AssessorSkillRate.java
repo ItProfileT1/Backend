@@ -22,7 +22,7 @@ public class AssessorSkillRate {
 
     @ManyToOne
     @JoinColumn(name = "assessor_id")
-    private Specialist assessor;
+    private User assessor;
 
     @ManyToOne
     @JoinColumn(name = "skill_id")
