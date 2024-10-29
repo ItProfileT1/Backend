@@ -19,14 +19,14 @@ public class UserService {
 
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new RuntimeException(String.format("Пользователь %s уже существует", user.getUsername()));
         }
         return save(user);
     }
 
     public User getByUsername(String username) {
         return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("Пользователь %s не найден", username)));
     }
 
     public UserDetailsService userDetailsService() {

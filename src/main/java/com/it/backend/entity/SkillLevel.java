@@ -5,28 +5,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "skill_levels", schema = "it_profile")
+@Table(name = "skills_skill_levels", schema = "it_profile")
 public class SkillLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    @Column(name = "numeric_value", nullable = false)
-    private int numericValue;
+    @Column(name = "development_way", nullable = false)
+    private String developmentWay;
 
-    @OneToMany(mappedBy = "minSkillLevel")
-    private Set<PositionSkill> levelPositionsSkills;
+    @ManyToOne
+    @JoinColumn(name = "skill_id")
+    private Skill skill;
 
-    @OneToMany(mappedBy = "skillLevel")
-    private Set<SpecialistSkill> levelSpecialistsSkills;
+    @ManyToOne
+    @JoinColumn(name = "level_id")
+    private Level level;
 }

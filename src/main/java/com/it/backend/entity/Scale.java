@@ -11,8 +11,8 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "skill_types", schema = "it_profile")
-public class SkillType {
+@Table(name = "rate_scales", schema = "it_profile")
+public class Scale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,7 +21,19 @@ public class SkillType {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "scale")
+    private Set<Rate> rates;
+
+    @OneToMany(mappedBy = "scale")
     private Set<Skill> skills;
 
+    public int getNumberOfSignificantRates() {
+        int counter = 0;
+        for (Rate rate : rates) {
+            if (rate.getNumericValue() != 0) {
+                counter++;
+            }
+        }
+        return counter;
+    }
 }

@@ -1,7 +1,10 @@
 package com.it.backend.repository;
 
-import com.it.backend.entity.SkillLevel;
+import com.it.backend.entity.Level;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SkillLevelRepository extends CrudRepository<SkillLevel, Long> {
+import java.util.Optional;
+
+public interface SkillLevelRepository extends CrudRepository<Level, Long> {
+    Optional<Level> findByNumericValue(Integer value);
 }

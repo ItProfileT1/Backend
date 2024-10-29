@@ -30,6 +30,11 @@ public class PositionController {
         return positionService.findPositionById(id);
     }
 
+    @GetMapping()
+    public Set<PositionResponse> findAllPositions() {
+        return positionService.findAllPositions();
+    }
+
     @PostMapping("{id}")
     public PositionResponse updatePosition(@PathVariable Long id, @RequestBody PositionRequest request) {
         return positionService.updatePosition(id, request);
@@ -41,8 +46,9 @@ public class PositionController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/skills")
+    @PostMapping("{id}/skills")
     public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
+        //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
         return positionSkillService.addSkills(id, request);
     }
 }

@@ -1,4 +1,4 @@
-package com.it.backend.dto;
+package com.it.backend.dto.request;
 
 public record SignInRequest (String username, String password){
 }

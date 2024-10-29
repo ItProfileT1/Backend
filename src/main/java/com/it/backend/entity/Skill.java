@@ -26,13 +26,17 @@ public class Skill {
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private SkillType type;
+    private Type type;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private SkillCategory skillCategory;
+    private Category category;
 
-    @OneToMany(mappedBy = "skill") // интеграция
+    @ManyToOne
+    @JoinColumn(name = "rate_scale_id")
+    private Scale scale;
+
+    @OneToMany(mappedBy = "skill") // TODO интеграция
     private Set<SpecialistSkill> skillSpecialistsLevels;
 
     @OneToMany(mappedBy = "skill")
@@ -42,5 +46,5 @@ public class Skill {
     private Set<PositionSkill> positionsSkillsMinLevels;
 
     @OneToMany(mappedBy = "skill")
-    private Set<SkillLevelDescription> levelsDescriptions;
+    private Set<SkillLevel> levelsDescriptions;
 }

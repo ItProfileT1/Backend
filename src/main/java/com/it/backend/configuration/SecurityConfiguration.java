@@ -5,6 +5,7 @@ import com.it.backend.utils.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,9 +35,18 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("admin", "admin").hasRole("ADMIN")
-                                .requestMatchers("info", "user", "principal").hasRole("USER")
+                                .requestMatchers("api/v1/auth/sign-in").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "api/v1/positions/**").authenticated()
+                                .requestMatchers("api/v1/auth/sign-up", "api/v1/positions/**").hasRole("ADMIN")
+                                .requestMatchers("api/v1/specialists/profile").hasRole("USER")
+
+                                .requestMatchers("api/v1/assessment-processes/**").authenticated()
+//                                .requestMatchers("api/v1/assessment-processes/**").hasRole("MASTER")
+                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes").hasRole("USER")
+                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes/{id}").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST,"api/v1/assessment-processes/{id}").hasRole("USER")
+
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

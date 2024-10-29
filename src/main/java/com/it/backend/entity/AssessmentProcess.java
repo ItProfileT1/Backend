@@ -26,10 +26,20 @@ public class AssessmentProcess {
     private OffsetDateTime deadline;
 
     @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User creator;
+
+    @ManyToOne
     @JoinColumn(name = "assessee_id")
-    private Specialist assessee;
+    private Specialist specialist;
 
     @OneToMany(mappedBy = "assessmentProcess")
     private Set<AssessorSkillRate> processRates;
 
+    @OneToMany(mappedBy = "assessmentProcess")
+    private Set<AssessmentProcessAssessorStatus> assessmentProcessAssessorStatuses;
+
+    public boolean isExpired() {
+        return deadline.isBefore(OffsetDateTime.now());
+    }
 }
