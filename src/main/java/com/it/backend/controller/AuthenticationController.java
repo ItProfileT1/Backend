@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/auth")
 @Tag(name = "Аутентификация")
-public class AuthController {
+public class AuthenticationController {
     //TODO назвать таблицы связки в бд 1:1 например вместо positions_skills -> position_skills
 
     private final AuthenticationService authenticationService;

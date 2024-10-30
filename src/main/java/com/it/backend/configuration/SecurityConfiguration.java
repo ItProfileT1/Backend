@@ -40,6 +40,13 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "api/v1/positions/**", "api/v1/skills/**").authenticated()
                                 .requestMatchers("api/v1/auth/sign-up", "api/v1/positions/**").hasRole("ADMIN")
                                 .requestMatchers("api/v1/specialists/profile").hasRole("USER")
+
+                                .requestMatchers("api/v1/assessment-processes/**").authenticated()
+//                                .requestMatchers("api/v1/assessment-processes/**").hasRole("MASTER")
+                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes").hasRole("USER")
+                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes/{id}").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST,"api/v1/assessment-processes/{id}").hasRole("USER")
+
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

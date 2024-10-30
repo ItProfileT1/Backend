@@ -25,7 +25,7 @@ public class SpecialistSkillService {
         SpecialistSkill specialistSkill = new SpecialistSkill();
         specialistSkill.setSpecialist(specialist);
         specialistSkill.setSkill(skill);
-        specialistSkill.setSkillLevel(skillLevelService.findByNumericValue(0));
+        specialistSkill.setLevel(skillLevelService.findByNumericValue(0));
         specialistSkillRepository.save(specialistSkill);
         return specialistSkill;
     }

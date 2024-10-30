@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -16,6 +18,9 @@ public class SpecialistSkill {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "date")
+    private LocalDate date;
+
     @ManyToOne
     @JoinColumn(name = "specialist_id")
     private Specialist specialist;
@@ -26,5 +31,5 @@ public class SpecialistSkill {
 
     @ManyToOne
     @JoinColumn(name = "level_id")
-    private SkillLevel skillLevel;
+    private Level level;
 }

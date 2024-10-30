@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface specialistRepository extends CrudRepository<Specialist, Long> {
+public interface SpecialistRepository extends CrudRepository<Specialist, Long> {
     boolean existsByUser(User user);
 
     Optional<Specialist> findByUser(User user);

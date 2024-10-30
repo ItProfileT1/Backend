@@ -1,7 +1,13 @@
 set search_path to it_profile;
 
-insert into skills(name)
-values ('Java'), ('Typescript'), ('Spring'), ('English');
+insert into skill_types(name)
+values ('Hard'), ('Soft');
+
+insert into rate_scales(name)
+values ('Scale1'), ('Scale2');
+
+insert into skills(name, type_id, rate_scale_id)
+values ('Java', 1, 1), ('Typescript', 1, 2), ('Spring', 1, 2), ('English', 1, 1);
 
 insert into positions(name)
 values ('Backend Developer'), ('Frontend developer');

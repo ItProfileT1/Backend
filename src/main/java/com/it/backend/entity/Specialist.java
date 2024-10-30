@@ -45,11 +45,8 @@ public class Specialist {
     private Set<SpecialistSkill> specialistSkillsLevels;
     //TODO тут стоит назвать specialistSkills
 
-    @OneToMany(mappedBy = "assessee")
+    @OneToMany(mappedBy = "specialist")
     private Set<AssessmentProcess> assessmentProcesses;
-
-    @OneToMany(mappedBy = "assessor")
-    private Set<AssessorSkillRate> assessorSkillRates;
 
     @ManyToOne
     @JoinColumn(name = "position_id")

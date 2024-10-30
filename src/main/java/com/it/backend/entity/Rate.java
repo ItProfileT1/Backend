@@ -21,9 +21,12 @@ public class Rate {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "numeric_value")
+    private int numericValue;
+
     @ManyToOne
     @JoinColumn(name = "scale_id")
-    private RateScale rateScale;
+    private Scale scale;
 
     @OneToMany(mappedBy = "rate")
     private Set<AssessorSkillRate> rateUsages;

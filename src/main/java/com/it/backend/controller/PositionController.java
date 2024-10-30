@@ -56,6 +56,5 @@ public class PositionController {
     public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
         //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
         return positionSkillService.addSkills(id, request);
-        //TODO Метод возвращает один скилл а должен список скиллов прикрепленных к позции
     }
 }

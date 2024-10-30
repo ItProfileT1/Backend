@@ -8,6 +8,7 @@ import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionMapper;
 import com.it.backend.mapper.SkillMapper;
 import com.it.backend.mapper.SpecialistMapper;
+import com.it.backend.repository.SpecialistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpecialistService {
 
     private final SpecialistSkillService specialistSkillService;
-    private final com.it.backend.repository.specialistRepository specialistRepository;
+    private final SpecialistRepository specialistRepository;
     private final PositionService positionService;
 
     @Transactional
