@@ -6,8 +6,11 @@ import com.it.backend.dto.response.PositionResponse;
 import com.it.backend.dto.response.PositionSkillResponse;
 import com.it.backend.service.PositionService;
 import com.it.backend.service.PositionSkillService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -15,6 +18,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/positions")
+@Tag(name = "Должности")
 public class PositionController {
 
     private final PositionService positionService;
@@ -31,7 +35,9 @@ public class PositionController {
     }
 
     @GetMapping()
-    public Set<PositionResponse> findAllPositions() {
+    @Operation(summary = "Получение всех должностей")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Set<PositionResponse> findAllPositions(){
         return positionService.findAllPositions();
     }
 
@@ -40,7 +46,7 @@ public class PositionController {
         return positionService.updatePosition(id, request);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return ResponseEntity.noContent().build();
