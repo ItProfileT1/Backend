@@ -20,14 +20,14 @@ public class SpecialistController {
     private final UserService userService;
 
     @PostMapping("profile")
-    @Operation(summary = "Создание профиля, доступно только юзеру")
+    @Operation(summary = "Создание профиля, доступно только специалисту")
     @PreAuthorize("hasRole('USER')")
     public ProfileResponse createProfile(@RequestBody ProfileRequest request){
         return specialistService.createProfile(request, userService.getCurrentUser());
     }
 
     @GetMapping("profile")
-    @Operation(summary = "Получение профиля, если он существует, доступно только юзеру")
+    @Operation(summary = "Получение профиля, если он существует, доступно только специалисту")
     @PreAuthorize("hasRole('USER')")
     public ProfileResponse findProfile(){
         return specialistService.getProfileByUser(userService.getCurrentUser());

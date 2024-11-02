@@ -21,7 +21,7 @@ public class SkillController {
     private final SkillService skillService;
 
     @GetMapping
-    @Operation(summary = "Получение всех скиллов")
+    @Operation(summary = "Получение всех скиллов, доступно только админстратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Set<SkillResponse> findAllSkills(){
         return skillService.findAll();

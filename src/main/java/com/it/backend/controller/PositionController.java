@@ -26,18 +26,20 @@ public class PositionController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Создание должности, доступно только администратору")
     public PositionResponse createPosition(@RequestBody PositionRequest request) {
         return positionService.createPosition(request);
     }
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение должности по айди, доступно только администратору и специалисту")
     public PositionResponse findPositionById(@PathVariable Long id) {
         return positionService.findPositionById(id);
     }
 
     @GetMapping()
-    @Operation(summary = "Получение всех должностей")
+    @Operation(summary = "Получение всех должностей, доступно только администратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Set<PositionResponse> findAllPositions(){
         return positionService.findAllPositions();
@@ -45,12 +47,14 @@ public class PositionController {
 
     @PostMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Изменение должности по айди, доступно только администратору")
     public PositionResponse updatePosition(@PathVariable Long id, @RequestBody PositionRequest request) {
         return positionService.updatePosition(id, request);
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Удаление должности по айди, доступно только администратору")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return ResponseEntity.noContent().build();
@@ -58,6 +62,7 @@ public class PositionController {
 
     @PostMapping("{id}/skills")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Добавление навыков к должности по айди, доступно только администратору")
     public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
         //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
         return positionSkillService.addSkills(id, request);
