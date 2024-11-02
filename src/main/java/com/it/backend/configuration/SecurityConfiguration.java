@@ -5,12 +5,12 @@ import com.it.backend.utils.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,6 +27,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalAuthentication
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfiguration {
 
@@ -47,16 +48,6 @@ public class SecurityConfiguration {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("api/v1/auth/sign-in").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "api/v1/positions/**", "api/v1/skills/**").authenticated()
-                                .requestMatchers("api/v1/auth/sign-up", "api/v1/positions/**").hasRole("ADMIN")
-                                .requestMatchers("api/v1/specialists/profile").hasRole("USER")
-
-                                .requestMatchers("api/v1/assessment-processes/**").authenticated()
-//                                .requestMatchers("api/v1/assessment-processes/**").hasRole("MASTER")
-                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes").hasRole("USER")
-                                .requestMatchers(HttpMethod.GET,"api/v1/assessment-processes/{id}").hasRole("USER")
-                                .requestMatchers(HttpMethod.POST,"api/v1/assessment-processes/{id}").hasRole("USER")
-
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

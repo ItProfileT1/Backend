@@ -25,11 +25,13 @@ public class PositionController {
     private final PositionSkillService positionSkillService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public PositionResponse createPosition(@RequestBody PositionRequest request) {
         return positionService.createPosition(request);
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public PositionResponse findPositionById(@PathVariable Long id) {
         return positionService.findPositionById(id);
     }
@@ -42,17 +44,20 @@ public class PositionController {
     }
 
     @PostMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public PositionResponse updatePosition(@PathVariable Long id, @RequestBody PositionRequest request) {
         return positionService.updatePosition(id, request);
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("{id}/skills")
+    @PreAuthorize("hasRole('ADMIN')")
     public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
         //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
         return positionSkillService.addSkills(id, request);
