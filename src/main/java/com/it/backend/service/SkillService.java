@@ -1,5 +1,6 @@
 package com.it.backend.service;
 
+import com.it.backend.dto.request.SkillRequest;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.Skill;
 import com.it.backend.exception.entity.EntityNotFoundException;
@@ -16,6 +17,9 @@ import java.util.Set;
 public class SkillService {
 
     private final SkillRepository skillRepository;
+    private final TypeService typeService;
+    private final CategoryService categoryService;
+    private final ScaleService scaleService;
 
     public Skill findById(Long id){
         return skillRepository.findById(id)
@@ -28,5 +32,20 @@ public class SkillService {
             skills.add(skill);
         }
         return SkillMapper.INSTANCE.toSkillResponses(skills);
+    }
+
+    public SkillResponse create(SkillRequest request) {
+        Skill skill = SkillMapper.INSTANCE.toSkill(
+                request,
+                typeService.findById(request.typeId()),
+                request.categoryId().map(categoryService::findById).orElse(null),
+                scaleService.findById(request.scaleId()));
+        var existingSkill = skillRepository.findByName(skill.getName());
+        if (existingSkill.isPresent()) {
+            //TODO Вернуть исключение
+            return SkillMapper.INSTANCE.toSkillResponse(existingSkill.get());
+        }
+        skillRepository.save(skill);
+        return SkillMapper.INSTANCE.toSkillResponse(skill);
     }
 }
