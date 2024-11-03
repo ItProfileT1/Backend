@@ -15,15 +15,18 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/skills")
-@Tag(name = "Скиллы")
+@Tag(name = "Навыки")
 public class SkillController {
 
     private final SkillService skillService;
 
     @GetMapping
-    @Operation(summary = "Получение всех скиллов, доступно только админстратору и специалисту")
+    @Operation(summary = "Получение всех навыков, доступно только администратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Set<SkillResponse> findAllSkills(){
         return skillService.findAll();
     }
+
+//    @PostMapping
+//    public Set<SkillResponse> createSkill()
 }

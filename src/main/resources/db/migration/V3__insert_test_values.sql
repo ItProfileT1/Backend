@@ -5,8 +5,8 @@ insert into users(username, password, role_id)
 values ('joe', '', 2),
        ('donald', '', 2);
 --
---Навыки
 
+--Навыки
 insert into skill_categories (skill_type_id, name)
 values (1, 'Languages'), (1, 'Tools'),
        (1, 'Techniques'), (1, 'Platforms');
@@ -18,8 +18,11 @@ insert into rates (scale_id, description, numeric_value)
 values (1, 'Стажер', 0), (1, 'Джуниор', 1), (1, 'Мидл', 2), (1, 'Синьер', 3),
        (2, 'A0', 0), (2, 'А2', 1), (2, 'B2', 2), (2, 'C1', 3), (2, 'C2', 4);
 
-insert into skills(name, type_id, rate_scale_id)
-values ('Java', 1, 1), ('Typescript', 1, 2), ('Spring', 1, 2), ('English', 2, 1);
+insert into skills (type_id, category_id, rate_scale_id, name, description)
+values (1, 1, 1, 'Java', 'java - programming language'),
+       (1, 1, 1, 'Typescript', 'typescript - programming language'),
+       (1, 3, 1, 'Spring', 'spring - web applications framework'),
+       (2, null, 2, 'English', 'english - international language');
 --
 
 --Должности
