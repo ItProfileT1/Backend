@@ -1,6 +1,7 @@
 package com.it.backend.controller;
 
 import com.it.backend.dto.request.SkillRequest;
+import com.it.backend.dto.response.CategorySkillResponse;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.service.SkillService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ public class SkillController {
     @GetMapping
     @Operation(summary = "Получение всех навыков, доступно только администратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Set<SkillResponse> findAllSkills(){
+    public Set<CategorySkillResponse> findAllSkills(){
         return skillService.findAll();
     }
 
