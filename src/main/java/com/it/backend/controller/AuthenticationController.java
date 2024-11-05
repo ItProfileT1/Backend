@@ -2,8 +2,9 @@ package com.it.backend.controller;
 
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
-import com.it.backend.dto.response.IdResponse;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
+import com.it.backend.dto.response.RoleResponse;
+import com.it.backend.dto.response.UserResponse;
 import com.it.backend.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,10 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +28,10 @@ public class AuthenticationController {
     @PostMapping("sign-up")
     @Operation(summary = "Регистрация пользователя, доступно только администратору")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<IdResponse> signUpUser(@RequestBody @Validated SignUpRequest request) {
+    public ResponseEntity<UserResponse> signUpUser(@RequestBody @Validated SignUpRequest request) {
         //TODO сделать обработку ошибок (пользователь с таким юзернеймом уже существует)
-        var id = authenticationService.signUp(request);
-        return ResponseEntity.ok(new IdResponse(id));
+        var userResponse = authenticationService.signUp(request);
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping("sign-in")
@@ -39,5 +39,12 @@ public class AuthenticationController {
     public JwtAuthenticationResponse signIn(@RequestBody @Validated SignInRequest request) {
         //TODO сделать обработку ошибок (неверный юзернейм или пароль)
         return authenticationService.signIn(request);
+    }
+
+    @GetMapping("roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Получение всех ролей, доступно только администратору")
+    public Set<RoleResponse> getRoles(){
+        return authenticationService.findRoles();
     }
 }

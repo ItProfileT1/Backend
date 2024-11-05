@@ -1,4 +1,4 @@
 package com.it.backend.dto.response;
 
-public record JwtAuthenticationResponse(String token) {
+public record JwtAuthenticationResponse(String token, RoleResponse roleResponse) {
 }

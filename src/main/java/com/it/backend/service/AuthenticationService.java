@@ -3,12 +3,17 @@ package com.it.backend.service;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
+import com.it.backend.dto.response.RoleResponse;
+import com.it.backend.dto.response.UserResponse;
 import com.it.backend.entity.User;
+import com.it.backend.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,14 +24,14 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RoleService roleService;
 
-    public Long signUp(SignUpRequest request) {
+    public UserResponse signUp(SignUpRequest request) {
         var user = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
-                .role(roleService.getByName("ROLE_USER"))
+                .role(roleService.findById(request.roleId()))
                 .build();
         userService.create(user);
-        return user.getId();
+        return UserMapper.INSTANCE.toUserResponse(user, request.password());
     }
 
     public JwtAuthenticationResponse signIn(SignInRequest request){
@@ -38,6 +43,13 @@ public class AuthenticationService {
                 .userDetailsService()
                 .loadUserByUsername(request.username());
         var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        var roleResponse = roleService.roleToRoleResponse(userService
+                .getByUsername(request.username())
+                .getRole());
+        return new JwtAuthenticationResponse(jwt, roleResponse);
+    }
+
+    public Set<RoleResponse> findRoles() {
+        return roleService.findAll();
     }
 }
