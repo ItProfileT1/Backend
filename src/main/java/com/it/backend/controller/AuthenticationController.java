@@ -7,6 +7,9 @@ import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.UserResponse;
 import com.it.backend.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +39,18 @@ public class AuthenticationController {
 
     @PostMapping("sign-in")
     @Operation(summary = "Авторизация пользователя")
-    public JwtAuthenticationResponse signIn(@RequestBody @Validated SignInRequest request) {
-        //TODO сделать обработку ошибок (неверный юзернейм или пароль)
+    public JwtAuthenticationResponse signIn(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Данные для входа", required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SignInRequest.class),
+                            examples = {
+                                    @ExampleObject(name = "Admin Login", value = "{\"username\": \"admin\", \"password\": \"admin\"}"),
+                                    @ExampleObject(name = "User Login", value = "{\"username\": \"joe\", \"password\": \"user\"}"),
+                                    @ExampleObject(name = "Master Login", value = "{\"username\": \"master\", \"password\": \"master\"}")
+                    }))
+            @RequestBody @Validated SignInRequest request) {
         return authenticationService.signIn(request);
+        //TODO сделать обработку ошибок (неверный юзернейм или пароль)
     }
 
     @GetMapping("roles")

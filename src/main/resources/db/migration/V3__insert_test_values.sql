@@ -2,8 +2,8 @@ set search_path to it_profile;
 
 --Пользователи
 insert into users(username, password, role_id)
-values ('joe', '', 2),
-       ('donald', '', 2);
+values ('joe', '$2a$10$6wrhugYaAiLGMiE4ZEbbiemMDQgG6NBCmSzAgfEYw6NfxzLcqdE0.', 2),
+       ('donald', '$2a$10$6wrhugYaAiLGMiE4ZEbbiemMDQgG6NBCmSzAgfEYw6NfxzLcqdE0.', 2);
 --
 
 --Навыки
