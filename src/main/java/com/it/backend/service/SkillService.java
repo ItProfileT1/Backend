@@ -2,15 +2,19 @@ package com.it.backend.service;
 
 import com.it.backend.dto.request.SkillRequest;
 import com.it.backend.dto.response.CategoryResponse;
-import com.it.backend.dto.response.CategorySkillResponse;
+import com.it.backend.dto.response.TypeResponse;
 import com.it.backend.dto.response.SkillResponse;
+import com.it.backend.entity.Category;
 import com.it.backend.entity.Skill;
+import com.it.backend.entity.Type;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.CategoryMapper;
 import com.it.backend.mapper.SkillMapper;
+import com.it.backend.mapper.skills.TypeMapper;
 import com.it.backend.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,27 +34,42 @@ public class SkillService {
         return skillRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("skill.not.found", id));
     }
-//category == null
-    public Set<CategorySkillResponse> findAll(){
-        Map<CategoryResponse, Set<SkillResponse>> categories = new HashMap<>();
+
+    @Transactional(readOnly = true)
+    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAll(){
+        Map<Type, Map<Category, Set<Skill>>> skills = new HashMap<>();
         for (Skill skill : skillRepository.findAll()) {
-            var skillResponse = SkillMapper.INSTANCE.toSkillResponse(skill);
-            var category = skill.getCategory();
-            CategoryResponse categoryResponse;
-            if (category != null){
-                categoryResponse = CategoryMapper.INSTANCE.toCategoryResponse(category);
+            var type = skill.getType();
+            Category category = new Category();
+            if (skill.getCategory() == null) {
+                category.setId(1L);
+                category.setName("Undefined");
+                category.setType(type);
             }
             else {
-                categoryResponse = new CategoryResponse(0L, "Undefined");
+                category = skill.getCategory();
             }
-            if (!categories.containsKey(categoryResponse)) {
-                categories.put(categoryResponse, new HashSet<>());
-            }
-            categories.get(categoryResponse).add(skillResponse);
+            skills.putIfAbsent(type, new HashMap<>());
+            skills.get(type).putIfAbsent(category, new HashSet<>());
+            skills.get(type).get(category).add(skill);
         }
-        Set<CategorySkillResponse> responses = new HashSet<>();
-        categories.forEach((key, value) -> responses.add(new CategorySkillResponse(key, value)));
-        return responses;
+        Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> typeCategoriesSkillsResponses = new HashMap<>();
+        skills.forEach((curType, categoryCategorySkill) -> {
+            Map<CategoryResponse, Set<SkillResponse>> categorySkillResponses = new HashMap<>();
+            categoryCategorySkill.forEach((curCategory, curSkills) -> {
+                Set<SkillResponse> skillResponses = new HashSet<>();
+                for (Skill curSkill : curSkills) {
+                    var skillResponse = SkillMapper.INSTANCE.toSkillResponse(curSkill);
+                    skillResponses.add(skillResponse);
+                }
+                var categoryResponse = CategoryMapper.INSTANCE.toCategoryResponse(curCategory);
+                categorySkillResponses.put(categoryResponse, skillResponses);
+            });
+            var typeResponse = TypeMapper.INSTANCE.toTypeResponse(curType);
+            typeCategoriesSkillsResponses.put(typeResponse, categorySkillResponses);
+        });
+
+        return typeCategoriesSkillsResponses;
     }
 
     public SkillResponse create(SkillRequest request) {

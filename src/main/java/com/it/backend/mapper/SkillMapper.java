@@ -27,9 +27,7 @@ public interface SkillMapper {
 
     Set<Skill> toSkills(Iterable<SpecialistSkill> specialistSkills);
 
-    @Mapping(source = "type.name", target = "type")
     SkillResponse toSkillResponse(Skill skill);
 
-    @Mapping(source = "type.name", target = "type")
     Set<SkillResponse> toSkillResponses(Set<Skill> skills);
 }

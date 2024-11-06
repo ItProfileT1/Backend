@@ -22,6 +22,8 @@ public class Type {
     private String name;
 
     @OneToMany(mappedBy = "type")
-    private Set<Skill> skills;
+    private Set<Category> categories;
 
+    @OneToMany(mappedBy = "type")
+    private Set<Skill> skills;
 }

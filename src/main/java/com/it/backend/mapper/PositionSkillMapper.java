@@ -22,7 +22,6 @@ public interface PositionSkillMapper {
     @Mapping(source = "positionSkill.position", target = "positionResponse")
     @Mapping(source = "positionSkill.skill", target = "skillResponse")
     @Mapping(source = "positionSkill.minLevel", target = "levelResponse")
-    @Mapping(source = "positionSkill.skill.type.name", target = "skillResponse.type")
     PositionSkillResponse toPositionSkillResponse(PositionSkill positionSkill);
 
     Set<PositionSkillResponse> toPositionSkillSetResponse(Iterable<PositionSkill> positionSkills);

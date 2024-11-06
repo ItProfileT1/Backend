@@ -1,6 +1,6 @@
 package com.it.backend.dto.response;
 
-public record CategoryResponse(
+public record TypeResponse(
         Long id,
         String name
 ) {

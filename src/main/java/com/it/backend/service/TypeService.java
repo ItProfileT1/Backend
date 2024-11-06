@@ -15,4 +15,5 @@ public class TypeService {
     public Type findById(Long id){
         return typeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("type.not.found", id));
     }
+
 }

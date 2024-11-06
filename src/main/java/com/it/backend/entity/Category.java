@@ -22,5 +22,9 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<Skill> skillTypes;
+    private Set<Skill> skills;
+
+    @ManyToOne
+    @JoinColumn(name = "skill_type_id")
+    private Type type;
 }
