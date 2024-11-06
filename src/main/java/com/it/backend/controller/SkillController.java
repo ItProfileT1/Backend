@@ -25,15 +25,14 @@ public class SkillController {
     @GetMapping
     @Operation(summary = "Получение всех навыков, доступно только администратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAllSkills(){
-        return skillService.findAll();
+    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAllSkills(@RequestParam(required = false) String type){
+        return skillService.findAll(type);
     }
-
 
     @PostMapping
     @Operation(summary = "Создание нового навыка, доступно только администратору")
     @PreAuthorize("hasRole('ADMIN')")
-    public SkillResponse createSkill(@RequestBody SkillRequest request){
+    public Map<TypeResponse, Map<CategoryResponse, SkillResponse>> createSkill(@RequestBody SkillRequest request){
         return skillService.create(request);
     }
 }

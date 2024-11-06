@@ -19,6 +19,8 @@ public interface SkillMapper {
     @Mapping(target = "skillRates", ignore = true)
     @Mapping(target = "positionsSkillsMinLevels", ignore = true)
     @Mapping(target = "levelsDescriptions", ignore = true)
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "type", source = "type")
     Skill toSkill(SkillRequest skillRequest, Type type, Category category, Scale scale);
 
     default Skill toSkill(SpecialistSkill specialistSkill) {

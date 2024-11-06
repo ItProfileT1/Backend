@@ -36,10 +36,19 @@ public class SkillService {
     }
 
     @Transactional(readOnly = true)
-    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAll(){
+    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAll(String typeName){
         Map<Type, Map<Category, Set<Skill>>> skills = new HashMap<>();
         for (Skill skill : skillRepository.findAll()) {
-            var type = skill.getType();
+            Type type;
+            if (typeName == null) {
+                type = skill.getType();
+            }
+            else {
+                type = typeService.findByName(typeName);
+                if (!skill.getType().equals(type)){
+                    continue;
+                }
+            }
             Category category = new Category();
             if (skill.getCategory() == null) {
                 category.setId(1L);
@@ -72,7 +81,8 @@ public class SkillService {
         return typeCategoriesSkillsResponses;
     }
 
-    public SkillResponse create(SkillRequest request) {
+    @Transactional
+    public Map<TypeResponse, Map<CategoryResponse, SkillResponse>> create(SkillRequest request) {
         Skill skill = SkillMapper.INSTANCE.toSkill(
                 request,
                 typeService.findById(request.typeId()),
@@ -81,9 +91,29 @@ public class SkillService {
         var existingSkill = skillRepository.findByName(skill.getName());
         if (existingSkill.isPresent()) {
             //TODO Вернуть исключение
-            return SkillMapper.INSTANCE.toSkillResponse(existingSkill.get());
+            return toFullResponse(existingSkill.get());
         }
         skillRepository.save(skill);
-        return SkillMapper.INSTANCE.toSkillResponse(skill);
+        return toFullResponse(skill);
+    }
+
+    private Map<TypeResponse, Map<CategoryResponse, SkillResponse>> toFullResponse(Skill skill){
+        var typeResponse = TypeMapper.INSTANCE.toTypeResponse(skill.getType());
+        Category category = new Category();
+        if (skill.getCategory() == null){
+            category.setId(1L);
+            category.setName("Undefined");
+            category.setType(skill.getType());
+        }
+        else {
+            category = skill.getCategory();
+        }
+        var categoryResponse = CategoryMapper.INSTANCE.toCategoryResponse(category);
+        var skillResponse = SkillMapper.INSTANCE.toSkillResponse(skill);
+        Map<TypeResponse, Map<CategoryResponse, SkillResponse>> fullResponse = new HashMap<>();
+        Map<CategoryResponse, SkillResponse> categorySkillResponse = new HashMap<>();
+        categorySkillResponse.put(categoryResponse, skillResponse);
+        fullResponse.put(typeResponse, categorySkillResponse);
+        return fullResponse;
     }
 }

@@ -16,4 +16,8 @@ public class TypeService {
         return typeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("type.not.found", id));
     }
 
+    public Type findByName(String name){
+        return typeRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(String.format("type.%s.not.found", name), 0L));
+    }
+
 }
