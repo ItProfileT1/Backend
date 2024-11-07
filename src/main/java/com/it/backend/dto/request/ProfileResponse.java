@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public record ProfileResponse(
+        Long id,
         String surname,
         String name,
         String patronymic,

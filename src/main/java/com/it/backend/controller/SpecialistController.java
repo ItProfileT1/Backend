@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/specialists")
@@ -35,5 +37,26 @@ public class SpecialistController {
     @PreAuthorize("hasRole('USER')")
     public ProfileResponse findProfile(){
         return specialistService.getProfileByUser(userService.getCurrentUser());
+    }
+
+    @GetMapping
+    @Operation(summary = "Получение всех специалистов, доступно только администратору и p2p сервису")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Set<ProfileResponse> findALlProfiles(){
+        return specialistService.findAll();
+    }
+
+    @GetMapping("{position}")
+    @Operation(summary = "Получение специалиста с определенной должностью, доступно только администратору и p2p сервису")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ProfileResponse findProfileByPosition(@PathVariable String position){
+        return specialistService.findByPosition(position);
+    }
+
+    @GetMapping("find/{id}")
+    @Operation(summary = "Получение специалиста по айди, доступно только администратору и p2p сервису")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ProfileResponse findProfileByPosition(@PathVariable Long id){
+        return specialistService.findById(id);
     }
 }

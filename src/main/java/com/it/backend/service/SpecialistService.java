@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class SpecialistService {
@@ -62,5 +65,27 @@ public class SpecialistService {
         if (specialistRepository.existsByUser(specialist.getUser()))
             return specialistRepository.save(specialist);
         throw new EntityNotFoundException("specialist.not.found", specialist.getId());
+    }
+
+    public Set<ProfileResponse> findAll() {
+        Set<ProfileResponse> profileResponses = new HashSet<>();
+        for (Specialist specialist : specialistRepository.findAll()) {
+            var profileResponse = getProfileBySpecialist(specialist);
+            profileResponses.add(profileResponse);
+        }
+        return profileResponses;
+    }
+
+    public ProfileResponse findByPosition(String positionName){
+        var position = positionService.findPositionByName(positionName);
+        var specialist = position.getSpecialists().stream().findAny()
+                .orElseThrow(() -> new EntityNotFoundException(String.format("specialist.with.position.%s.not.found", positionName), 0L));
+        return getProfileBySpecialist(specialist);
+    }
+
+    public ProfileResponse findById(Long id) {
+        var specialist = specialistRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(("specialist.not.found"), id));
+        return getProfileBySpecialist(specialist);
     }
 }

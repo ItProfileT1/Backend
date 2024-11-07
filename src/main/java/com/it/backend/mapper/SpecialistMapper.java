@@ -29,5 +29,6 @@ public interface SpecialistMapper {
     @Mapping(target = "positionResponse", source = "positionResponse")
     @Mapping(target = "skillResponses", source = "skillResponses")
     @Mapping(source = "specialist.name", target = "name")
+    @Mapping(source = "specialist.id", target = "id")
     ProfileResponse toProfileResponse(Specialist specialist, PositionResponse positionResponse, Set<SkillResponse> skillResponses);
 }

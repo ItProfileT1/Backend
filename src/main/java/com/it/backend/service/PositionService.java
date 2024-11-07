@@ -60,4 +60,9 @@ public class PositionService {
     public Set<PositionSkill> findAllPositionSkillsByPosition(Position position){
         return position.getPositionSkillsLevels();
     }
+
+    public Position findPositionByName(String positionName) {
+        return positionRepository.findByName(positionName)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("position.%s.not.found", positionName), 0L));
+    }
 }
