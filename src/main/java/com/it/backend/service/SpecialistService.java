@@ -67,20 +67,19 @@ public class SpecialistService {
         throw new EntityNotFoundException("specialist.not.found", specialist.getId());
     }
 
-    public Set<ProfileResponse> findAll() {
+    public Set<ProfileResponse> findByPosition(String positionName){
+        Iterable<Specialist> specialists;
+        if (positionName == null) {
+            specialists = specialistRepository.findAll();
+        }
+        else {
+            specialists = positionService.findPositionByName(positionName).getSpecialists();
+        }
         Set<ProfileResponse> profileResponses = new HashSet<>();
-        for (Specialist specialist : specialistRepository.findAll()) {
-            var profileResponse = getProfileBySpecialist(specialist);
-            profileResponses.add(profileResponse);
+        for (Specialist specialist : specialists) {
+            profileResponses.add(getProfileBySpecialist(specialist));
         }
         return profileResponses;
-    }
-
-    public ProfileResponse findByPosition(String positionName){
-        var position = positionService.findPositionByName(positionName);
-        var specialist = position.getSpecialists().stream().findAny()
-                .orElseThrow(() -> new EntityNotFoundException(String.format("specialist.with.position.%s.not.found", positionName), 0L));
-        return getProfileBySpecialist(specialist);
     }
 
     public ProfileResponse findById(Long id) {
