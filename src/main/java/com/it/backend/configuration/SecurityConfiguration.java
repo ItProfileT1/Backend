@@ -2,7 +2,7 @@ package com.it.backend.configuration;
 
 import com.it.backend.service.UserService;
 import com.it.backend.utils.ApiTokenAuthenticationFilter;
-import com.it.backend.utils.CustomAuthenticationFilter;
+import com.it.backend.utils.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     private final UserService userService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationFilter customAuthenticationFilter, ApiTokenAuthenticationFilter apiTokenAuthenticationFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter, ApiTokenAuthenticationFilter apiTokenAuthenticationFilter) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(apiTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(customAuthenticationFilter, ApiTokenAuthenticationFilter.class);
+                .addFilterAfter(jwtAuthenticationFilter, ApiTokenAuthenticationFilter.class);
         return http.build();
     }
 

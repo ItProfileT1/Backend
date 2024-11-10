@@ -5,6 +5,7 @@ import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.repository.ApiClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,18 +13,24 @@ import org.springframework.stereotype.Service;
 public class ApiClientService {
 
     private final ApiClientRepository apiClientRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Iterable<ApiClient> findAll(){
         return apiClientRepository.findAll();
     }
 
     public boolean existsByToken(String token){
-        return apiClientRepository.existsByToken(token);
+        for (ApiClient apiClient : findAll()) {
+            if (passwordEncoder.matches(token, apiClient.getToken())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public ApiClient getByToken(String token){
         for (ApiClient apiClient : findAll()) {
-            if (token.equals(apiClient.getToken())){
+            if (passwordEncoder.matches(token, apiClient.getToken())){
                 return apiClient;
             }
         }

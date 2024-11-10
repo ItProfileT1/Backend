@@ -1,7 +1,7 @@
 package com.it.backend.utils;
 
 import com.it.backend.service.ApiClientService;
-import com.it.backend.service.ApiTokenService;
+import com.it.backend.service.security.ApiTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

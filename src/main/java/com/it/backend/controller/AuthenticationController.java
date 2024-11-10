@@ -5,7 +5,7 @@ import com.it.backend.dto.request.SignUpRequest;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.UserResponse;
-import com.it.backend.service.AuthenticationService;
+import com.it.backend.service.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

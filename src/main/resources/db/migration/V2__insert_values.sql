@@ -7,7 +7,7 @@ values ('ROLE_ADMIN'),
        ('ROLE_P2P');
 
 insert into api_clients(token, role_id)
-values ('zzLH4K0J4YIZKYSXUbKHKwMdW/gTxtT5Zbzd-5vmAPiOjkMH4lNBXjg4sD3u', 4);
+values ('$2a$10$FE.QkmD5roR024XbcZyRXO4odh4MqYj/Gdvft4FM3Nv16/Lz5/sAa', 4);
 
 insert into users(username, password, role_id)
 values ('admin', '$2a$10$olLZfxwgaD1N9e4GIDoBIe6tQgu80Sphyg.kqSzum3VISvMOhwlxS', '1'),

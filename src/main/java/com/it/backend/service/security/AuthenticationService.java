@@ -1,4 +1,4 @@
-package com.it.backend.service;
+package com.it.backend.service.security;
 
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.request.SignInRequest;
@@ -7,6 +7,8 @@ import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.UserResponse;
 import com.it.backend.entity.User;
 import com.it.backend.mapper.UserMapper;
+import com.it.backend.service.RoleService;
+import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
