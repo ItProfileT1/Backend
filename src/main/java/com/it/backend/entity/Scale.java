@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "rate_scales", schema = "it_profile")
+@Table(name = "scales", schema = "it_profile")
 public class Scale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

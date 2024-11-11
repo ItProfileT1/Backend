@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "specialists_skills", schema = "it_profile")
+@Table(name = "specialist_skill", schema = "it_profile")
 public class SpecialistSkill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

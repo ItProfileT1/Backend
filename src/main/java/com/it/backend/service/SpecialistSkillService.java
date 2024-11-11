@@ -17,7 +17,7 @@ import java.util.Set;
 public class SpecialistSkillService {
 
     private final SkillService skillService;
-    private final SkillLevelService skillLevelService;
+    private final LevelService skillLevelService;
     private final PositionSkillService positionSkillService;
     private final SpecialistSkillRepository specialistSkillRepository;
 

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "positions_skills", schema = "it_profile")
+@Table(name = "position_skill", schema = "it_profile")
 public class PositionSkill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,4 @@ public class PositionSkill {
     @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skill;
-
-    @ManyToOne
-    @JoinColumn(name = "min_level_id")
-    private Level minLevel;
 }

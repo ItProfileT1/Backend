@@ -6,6 +6,6 @@ public record AssessmentProcessResponse(
         Long id,
         OffsetDateTime createdAt,
         OffsetDateTime deadline,
-        SpecialistResponse specialistResponse
+        SpecialistResponse specialist
 ) {
 }

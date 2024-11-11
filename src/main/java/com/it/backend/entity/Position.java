@@ -28,6 +28,6 @@ public class Position {
     private Set<Specialist> specialists;
 
     @OneToMany(mappedBy = "position")
-    private Set<PositionSkill> positionSkillsLevels;
+    private Set<PositionSkill> positionSkills;
 
 }

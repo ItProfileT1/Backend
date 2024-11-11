@@ -9,10 +9,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface LevelMapper {
-    LevelMapper INSTANCE = Mappers.getMapper(LevelMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "levelPositionsSkills", ignore = true)
     @Mapping(target = "levelSpecialistsSkills", ignore = true)
     Level toSkillLevel(LevelRequest levelRequest);
 

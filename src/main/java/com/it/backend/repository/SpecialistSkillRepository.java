@@ -17,7 +17,7 @@ public interface SpecialistSkillRepository extends JpaRepository<SpecialistSkill
 
     boolean existsBySpecialistAndSkill(Specialist specialist, Skill skill);
 
-    @Query(value = "SELECT s.skill FROM SpecialistSkill s WHERE s.specialist = :specialist " +
-            "AND s.level.numericValue = 0")
+    @Query(value = "SELECT s.level FROM SpecialistSkill s WHERE s.specialist = :specialist " +
+            "AND s.level = null")
     Set<Skill> findAllUnratedSkillsBySpecialist(Specialist specialist);
 }

@@ -29,6 +29,7 @@ public class SkillService {
     private final TypeService typeService;
     private final CategoryService categoryService;
     private final ScaleService scaleService;
+    private final SkillMapper skillMapper;
 
     public Skill findById(Long id){
         return skillRepository.findById(id)
@@ -68,7 +69,7 @@ public class SkillService {
             categoryCategorySkill.forEach((curCategory, curSkills) -> {
                 Set<SkillResponse> skillResponses = new HashSet<>();
                 for (Skill curSkill : curSkills) {
-                    var skillResponse = SkillMapper.INSTANCE.toSkillResponse(curSkill);
+                    var skillResponse = skillMapper.toSkillResponse(curSkill);
                     skillResponses.add(skillResponse);
                 }
                 var categoryResponse = CategoryMapper.INSTANCE.toCategoryResponse(curCategory);
@@ -83,7 +84,7 @@ public class SkillService {
 
     @Transactional
     public Map<TypeResponse, Map<CategoryResponse, SkillResponse>> create(SkillRequest request) {
-        Skill skill = SkillMapper.INSTANCE.toSkill(
+        Skill skill = skillMapper.toSkill(
                 request,
                 typeService.findById(request.typeId()),
                 request.categoryId().map(categoryService::findById).orElse(null),
@@ -109,7 +110,7 @@ public class SkillService {
             category = skill.getCategory();
         }
         var categoryResponse = CategoryMapper.INSTANCE.toCategoryResponse(category);
-        var skillResponse = SkillMapper.INSTANCE.toSkillResponse(skill);
+        var skillResponse = skillMapper.toSkillResponse(skill);
         Map<TypeResponse, Map<CategoryResponse, SkillResponse>> fullResponse = new HashMap<>();
         Map<CategoryResponse, SkillResponse> categorySkillResponse = new HashMap<>();
         categorySkillResponse.put(categoryResponse, skillResponse);

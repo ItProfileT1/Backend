@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface AssessorSkillRateMapper {
-    AssessorSkillRateMapper INSTANCE = Mappers.getMapper(AssessorSkillRateMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "rate", ignore = true)
