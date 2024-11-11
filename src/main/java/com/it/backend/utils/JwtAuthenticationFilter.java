@@ -1,6 +1,6 @@
 package com.it.backend.utils;
 
-import com.it.backend.service.JwtService;
+import com.it.backend.service.security.JwtService;
 import com.it.backend.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

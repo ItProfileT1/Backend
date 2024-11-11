@@ -10,16 +10,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/specialists")
 @Tag(name = "Специалисты и их профили")
 public class SpecialistController {
-    //TODO изменить профайл респонс
-    //TODO юзер дитейлс из методов оценки
-    //TODO Добавить категории в скиллы и доавить логику их обновления из интеграции
+    //изменить профайл респонс
+    //юзер дитейлс из методов оценки
     //Добавить методы круд к скиллам и профилям если это нужно фронту
-    //Возможно добавить еще какие то методы для руководителя и админа
+    //Возможно добавить еще какие то методы для руководителя и админа, регистрация мастера
     //Прочитать у марины про возможность зарпрета каких то методово ролям
     private final SpecialistService specialistService;
     private final UserService userService;
@@ -36,5 +37,19 @@ public class SpecialistController {
     @PreAuthorize("hasRole('USER')")
     public ProfileResponse findProfile(){
         return specialistService.getProfileByUser(userService.getCurrentUser());
+    }
+
+    @GetMapping
+    @Operation(summary = "Получение специалистов с определенной должностью, доступно только администратору и p2p сервису")
+    @PreAuthorize("hasAnyRole('P2P', 'ADMIN')")
+    public Set<ProfileResponse> findAllProfilesByPosition(@RequestParam(required = false) String position){
+        return specialistService.findByPosition(position);
+    }
+
+    @GetMapping("{id}")
+    @Operation(summary = "Получение специалиста по айди, доступно только администратору и p2p сервису")
+    @PreAuthorize("hasAnyRole('P2P', 'ADMIN')")
+    public ProfileResponse findProfileByPosition(@PathVariable Long id){
+        return specialistService.findById(id);
     }
 }

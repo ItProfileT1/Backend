@@ -5,7 +5,6 @@ import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
 

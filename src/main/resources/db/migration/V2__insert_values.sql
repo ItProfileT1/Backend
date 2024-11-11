@@ -1,7 +1,13 @@
 set search_path to it_profile;
 
 insert into roles (name)
-values ('ROLE_ADMIN'), ('ROLE_USER'), ('ROLE_MASTER');
+values ('ROLE_ADMIN'),
+       ('ROLE_USER'),
+       ('ROLE_MASTER'),
+       ('ROLE_P2P');
+
+insert into api_clients(token, role_id)
+values ('$2a$10$FE.QkmD5roR024XbcZyRXO4odh4MqYj/Gdvft4FM3Nv16/Lz5/sAa', 4);
 
 insert into users(username, password, role_id)
 values ('admin', '$2a$10$olLZfxwgaD1N9e4GIDoBIe6tQgu80Sphyg.kqSzum3VISvMOhwlxS', '1'),
@@ -15,4 +21,5 @@ values ('Негативное проявление компетенции', -1),
        ('Экспертный уровень владения компетенцией', 3);
 
 insert into types(name)
-values ('Hard'), ('Soft');
+values ('Hard'),
+       ('Soft');

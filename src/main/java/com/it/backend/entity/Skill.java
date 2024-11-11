@@ -39,7 +39,7 @@ public class Skill {
     @JoinColumn(name = "scale_id")
     private Scale scale;
 
-    @OneToMany(mappedBy = "skill") // TODO интеграция
+    @OneToMany(mappedBy = "skill")
     private Set<SpecialistSkill> skillSpecialistsLevels;
 
     @OneToMany(mappedBy = "skill")

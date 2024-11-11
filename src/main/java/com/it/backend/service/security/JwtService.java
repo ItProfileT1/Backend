@@ -1,4 +1,4 @@
-package com.it.backend.service;
+package com.it.backend.service.security;
 
 import com.it.backend.entity.User;
 import io.jsonwebtoken.Claims;

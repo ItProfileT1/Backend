@@ -25,5 +25,6 @@ public interface SpecialistMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(source = "specialist.name", target = "name")
+    @Mapping(source = "specialist.id", target = "id")
     ProfileResponse toProfileResponse(Specialist specialist, PositionResponse positionResponse, Set<SkillResponse> skillResponses);
 }
