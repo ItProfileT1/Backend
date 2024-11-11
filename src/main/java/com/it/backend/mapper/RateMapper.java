@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface RateMapper {
-    RateMapper INSTANCE = Mappers.getMapper(RateMapper.class);
 
     RateResponse toRateResponse(Rate rate);
 

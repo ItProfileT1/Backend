@@ -1,7 +1,4 @@
-package com.it.backend.dto.request;
-
-import com.it.backend.dto.response.PositionResponse;
-import com.it.backend.dto.response.SkillResponse;
+package com.it.backend.dto.response;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -13,7 +10,7 @@ public record ProfileResponse(
         LocalDate birthday,
         String city,
         String sex,
-        PositionResponse positionResponse,
-        Set<SkillResponse> skillResponses
+        PositionResponse positions,
+        Set<SkillResponse> skills
 ) {
 }

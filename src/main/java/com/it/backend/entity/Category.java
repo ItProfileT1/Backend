@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "skill_categories", schema = "it_profile")
+@Table(name = "categories", schema = "it_profile")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +22,9 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<Skill> skillTypes;
+    private Set<Skill> skills;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private Type type;
 }

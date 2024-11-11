@@ -1,7 +1,7 @@
 package com.it.backend.service;
 
 import com.it.backend.dto.request.ProfileRequest;
-import com.it.backend.dto.request.ProfileResponse;
+import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.entity.Specialist;
 import com.it.backend.entity.User;
 import com.it.backend.exception.entity.EntityNotFoundException;
@@ -20,10 +20,13 @@ public class SpecialistService {
     private final SpecialistSkillService specialistSkillService;
     private final SpecialistRepository specialistRepository;
     private final PositionService positionService;
+    private final SkillMapper skillMapper;
+    private final SpecialistMapper specialistMapper;
+    private final PositionMapper positionMapper;
 
     @Transactional
     public ProfileResponse createProfile(ProfileRequest request, User user){
-        Specialist specialist = SpecialistMapper.INSTANCE.toSpecialist(request);
+        Specialist specialist = specialistMapper.toSpecialist(request);
         request.positionId()
                 .map(positionService::findById)
                 .ifPresent((specialist::setPosition));
@@ -45,10 +48,10 @@ public class SpecialistService {
     }
 
     private ProfileResponse getProfileBySpecialist(Specialist specialist) {
-        var positionResponse = PositionMapper.INSTANCE.toPositionResponse(specialist.getPosition());
+        var positionResponse = positionMapper.toPositionResponse(specialist.getPosition());
         var skills = specialistSkillService.getSkillsBySpecialist(specialist);
-        var skillResponses = SkillMapper.INSTANCE.toSkillResponses(skills);
-        return SpecialistMapper.INSTANCE.toProfileResponse(specialist, positionResponse, skillResponses);
+        var skillResponses = skillMapper.toSkillResponses(skills);
+        return specialistMapper.toProfileResponse(specialist, positionResponse, skillResponses);
     }
 
     public Specialist saveSpecialist(Specialist specialist){

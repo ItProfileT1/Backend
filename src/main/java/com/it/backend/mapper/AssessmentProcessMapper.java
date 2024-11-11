@@ -13,7 +13,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface AssessmentProcessMapper {
-    AssessmentProcessMapper INSTANCE = Mappers.getMapper(AssessmentProcessMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "processRates", ignore = true)
@@ -22,7 +21,6 @@ public interface AssessmentProcessMapper {
                                           Specialist specialist, User creator,
                                           OffsetDateTime createdAt);
 
-    @Mapping(source = "assessmentProcess.specialist", target = "specialistResponse")
     AssessmentProcessResponse toAssessmentProcessResponse(AssessmentProcess assessmentProcess);
 
     Set<AssessmentProcessResponse> toAssessmentProcessesResponse(Iterable<AssessmentProcess> assessmentProcesses);

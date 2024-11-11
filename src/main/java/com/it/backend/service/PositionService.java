@@ -18,18 +18,19 @@ import java.util.Set;
 public class PositionService {
 
     private final PositionRepository positionRepository;
+    private final PositionMapper positionMapper;
 
     public PositionResponse createPosition(PositionRequest request) {
-        Position position = PositionMapper.INSTANCE.toPosition(request);
+        Position position = positionMapper.toPosition(request);
         if (positionRepository.existsByName(position.getName())) {
             //TODO сделать обработку ошибки в случае если должность уже существует
         }
-        return PositionMapper.INSTANCE.toPositionResponse(positionRepository.save(position));
+        return positionMapper.toPositionResponse(positionRepository.save(position));
     }
 
     public PositionResponse findPositionById(Long id) {
         var position = findById(id);
-        return PositionMapper.INSTANCE.toPositionResponse(position);
+        return positionMapper.toPositionResponse(position);
     }
 
     public Position findById(Long id){
@@ -41,7 +42,7 @@ public class PositionService {
         Iterable<Position> positions = positionRepository.findAll();
         Set<PositionResponse> positionResponses = new HashSet<>();
         for (Position position : positions) {
-            positionResponses.add(PositionMapper.INSTANCE.toPositionResponse(position));
+            positionResponses.add(positionMapper.toPositionResponse(position));
         }
         return positionResponses;
     }
@@ -49,8 +50,8 @@ public class PositionService {
     public PositionResponse updatePosition(Long id, PositionRequest request) {
         Position position = positionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
-        PositionMapper.INSTANCE.updatePosition(request, position);
-        return PositionMapper.INSTANCE.toPositionResponse(positionRepository.save(position));
+        positionMapper.updatePosition(request, position);
+        return positionMapper.toPositionResponse(positionRepository.save(position));
     }
 
     public void deletePosition(Long id) {
@@ -58,6 +59,6 @@ public class PositionService {
     }
 
     public Set<PositionSkill> findAllPositionSkillsByPosition(Position position){
-        return position.getPositionSkillsLevels();
+        return position.getPositionSkills();
     }
 }

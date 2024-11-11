@@ -10,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface AssessmentProcessAssessorStatusMapper {
-    AssessmentProcessAssessorStatusMapper INSTANCE = Mappers.getMapper(AssessmentProcessAssessorStatusMapper.class);
 
     @Mapping(target = "id", ignore = true)
     AssessmentProcessAssessorStatus toAssessmentProcessAssessorStatus(

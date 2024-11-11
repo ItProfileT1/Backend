@@ -7,5 +7,5 @@ import com.it.backend.entity.Level;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PositionSkillRepository extends CrudRepository<PositionSkill, Long> {
-    boolean existsByPositionAndSkillAndMinLevel(Position position, Skill skill, Level minLevel);
+    boolean existsByPositionAndSkill(Position position, Skill skill);
 }

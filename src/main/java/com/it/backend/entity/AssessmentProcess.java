@@ -30,7 +30,7 @@ public class AssessmentProcess {
     private User creator;
 
     @ManyToOne
-    @JoinColumn(name = "assessee_id")
+    @JoinColumn(name = "specialist_id")
     private Specialist specialist;
 
     @OneToMany(mappedBy = "assessmentProcess")

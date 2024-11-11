@@ -20,6 +20,7 @@ public class SkillService {
     private final TypeService typeService;
     private final CategoryService categoryService;
     private final ScaleService scaleService;
+    private final SkillMapper skillMapper;
 
     public Skill findById(Long id){
         return skillRepository.findById(id)
@@ -31,11 +32,11 @@ public class SkillService {
         for (Skill skill : skillRepository.findAll()) {
             skills.add(skill);
         }
-        return SkillMapper.INSTANCE.toSkillResponses(skills);
+        return skillMapper.toSkillResponses(skills);
     }
 
     public SkillResponse create(SkillRequest request) {
-        Skill skill = SkillMapper.INSTANCE.toSkill(
+        Skill skill = skillMapper.toSkill(
                 request,
                 typeService.findById(request.typeId()),
                 request.categoryId().map(categoryService::findById).orElse(null),
@@ -43,9 +44,9 @@ public class SkillService {
         var existingSkill = skillRepository.findByName(skill.getName());
         if (existingSkill.isPresent()) {
             //TODO Вернуть исключение
-            return SkillMapper.INSTANCE.toSkillResponse(existingSkill.get());
+            return skillMapper.toSkillResponse(existingSkill.get());
         }
         skillRepository.save(skill);
-        return SkillMapper.INSTANCE.toSkillResponse(skill);
+        return skillMapper.toSkillResponse(skill);
     }
 }

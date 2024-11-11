@@ -1,12 +1,8 @@
 package com.it.backend.dto.response;
 
-import java.time.LocalDate;
-
-public record SkillLevelResponse(
-        Long id,
+public record ResultResponse(
         SkillResponse skill,
         LevelResponse level,
-        LocalDate date,
         String description,
         String developmentWay
 ) {

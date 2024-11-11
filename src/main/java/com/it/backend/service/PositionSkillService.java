@@ -9,10 +9,7 @@ import com.it.backend.entity.PositionSkill;
 import com.it.backend.entity.Skill;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionSkillMapper;
-import com.it.backend.repository.PositionRepository;
-import com.it.backend.repository.PositionSkillRepository;
-import com.it.backend.repository.SkillLevelRepository;
-import com.it.backend.repository.SkillRepository;
+import com.it.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +21,9 @@ public class PositionSkillService {
     private final PositionSkillRepository positionSkillRepository;
     private final PositionRepository positionRepository;
     private final SkillRepository skillRepository;
-    private final SkillLevelRepository skillLevelRepository;
+    private final LevelRepository levelRepository;
     private final PositionService positionService;
+    private final PositionSkillMapper positionSkillMapper;
 
     public Set<PositionSkillResponse> addSkills(Long id, PositionSkillsRequest request) {
         Position position = positionRepository.findById(id).orElseThrow(
@@ -35,16 +33,16 @@ public class PositionSkillService {
             Skill skill = skillRepository.findById(subRequest.skillId()).orElseThrow(
                     () -> new EntityNotFoundException("skill.not.found", subRequest.skillId())
             );
-            Level level = skillLevelRepository.findById(subRequest.minLevelId()).orElseThrow(
+            Level level = levelRepository.findById(subRequest.minLevelId()).orElseThrow(
                     () -> new EntityNotFoundException("level.not.found", subRequest.skillId())
             );
-            if (positionSkillRepository.existsByPositionAndSkillAndMinLevel(position, skill, level)) {
+            if (positionSkillRepository.existsByPositionAndSkill(position, skill)) {
             //TODO сделать обработку ошибки
             }
-            PositionSkill positionSkill = PositionSkillMapper.INSTANCE.toPositionSkill(position, skill, level);
+            PositionSkill positionSkill = positionSkillMapper.toPositionSkill(position, skill);
             newPositionSkills.add(positionSkill);
         }
-        return PositionSkillMapper.INSTANCE.toPositionSkillSetResponse(positionSkillRepository.saveAll(newPositionSkills));
+        return positionSkillMapper.toPositionSkillSetResponse(positionSkillRepository.saveAll(newPositionSkills));
     }
 
     public Set<Skill> findSkillsByPosition(Position position) {

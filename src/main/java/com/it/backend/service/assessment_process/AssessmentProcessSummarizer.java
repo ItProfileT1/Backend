@@ -18,6 +18,7 @@ import java.util.Set;
 public class AssessmentProcessSummarizer {
     private final LevelRepository levelRepository;
     private final AssessorSkillRateRepository assessorSkillRateRepository;
+    private final SpecialistSkillMapper specialistSkillMapper;
 
     public Set<SpecialistSkill> summarizeResults(AssessmentProcess assessmentProcess) {
         MultiValuedMap<Skill, Rate> skillRates = getAssessmentProcessSkillRates(assessmentProcess);
@@ -30,12 +31,17 @@ public class AssessmentProcessSummarizer {
             for (Rate rate : skillRates.get(skill)) {
                 actualRateSum += rate.getNumericValue();
             }
-            long avgActualRate = actualRateSum / numberOfRates;
-            long numberOfLevels = levelRepository.count();
-            long levelNumericValue = avgActualRate / (maxRateSum / numberOfLevels + 1) + 1;
+            long levelNumericValue;
+            if (actualRateSum < 0) {
+                levelNumericValue = -1;
+            } else {
+                long avgActualRate = actualRateSum / numberOfRates;
+                long numberOfLevels = levelRepository.count();
+                levelNumericValue = avgActualRate / (maxRateSum / numberOfLevels + 1);
+            }
             Level level = levelRepository.findByNumericValue((int) levelNumericValue);
 
-            specialistSkills.add(SpecialistSkillMapper.INSTANCE.toSpecialistSkill(
+            specialistSkills.add(specialistSkillMapper.toSpecialistSkill(
                     assessmentProcess.getSpecialist(), skill, level, LocalDate.now()));
         }
         return specialistSkills;

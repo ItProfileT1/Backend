@@ -5,6 +5,6 @@ import java.util.Set;
 
 public record SkillLevelsRequest(
         LocalDate date,
-        Set<SkillLevelRequest> skillLevelsRequest
+        Set<SkillLevelRequest> skillLevels
 ) {
 }

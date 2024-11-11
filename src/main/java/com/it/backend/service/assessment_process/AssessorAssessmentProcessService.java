@@ -1,11 +1,15 @@
 package com.it.backend.service.assessment_process;
 
-import com.it.backend.dto.request.*;
+import com.it.backend.dto.request.AssessorSkillRateRequest;
+import com.it.backend.dto.request.AssessorSkillRatesRequest;
 import com.it.backend.dto.response.AssessmentProcessResponse;
 import com.it.backend.dto.response.QuestionResponse;
 import com.it.backend.entity.*;
 import com.it.backend.exception.entity.EntityNotFoundException;
-import com.it.backend.mapper.*;
+import com.it.backend.mapper.AssessmentProcessMapper;
+import com.it.backend.mapper.AssessorSkillRateMapper;
+import com.it.backend.mapper.QuestionMapper;
+import com.it.backend.mapper.SkillMapper;
 import com.it.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,11 +20,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class UserAssessmentProcessService {
+public class AssessorAssessmentProcessService {
     private final SpecialistSkillRepository specialistSkillRepository;
     private final AssessmentProcessRepository assessmentProcessRepository;
     private final AssessorSkillRateRepository assessorSkillRateRepository;
@@ -28,12 +36,15 @@ public class UserAssessmentProcessService {
     private final RateRepository rateRepository;
     private final AssessmentProcessAssessorStatusRepository assessmentProcessAssessorStatusRepository;
     private final AssessmentProcessValidator assessmentProcessValidator;
+    private final SkillMapper skillMapper;
+    private final QuestionMapper questionMapper;
+    private final AssessmentProcessMapper assessmentProcessMapper;
+    private final AssessorSkillRateMapper assessorSkillRateMapper;
 
     public Set<AssessmentProcessResponse> getAssignedAssessmentProcesses(UserDetails userDetails) {
         User user = (User) userDetails;
-        Set<AssessmentProcess> assessmentProcesses = assessmentProcessRepository
-                .findAllAssessmentProcessesByAssessorId(user, Status.AWAITING);
-        return AssessmentProcessMapper.INSTANCE.toAssessmentProcessesResponse(assessmentProcesses);
+        user.setAssessmentProcesses(assessmentProcessRepository.findAllAssessmentProcessesByAssessor(user, Status.AWAITING, OffsetDateTime.now()));
+        return assessmentProcessMapper.toAssessmentProcessesResponse(user.getAssessmentProcesses());
     }
 
     public Page<QuestionResponse> getQuestionsByAssessmentProcessId(Long id, UserDetails userDetails, int page, int size) {
@@ -46,12 +57,12 @@ public class UserAssessmentProcessService {
         Page<SpecialistSkill> specialistSkills = specialistSkillRepository.findBySpecialist(
                 assessmentProcess.getSpecialist(), pageable);
 
-        Set<Skill> skills = SkillMapper.INSTANCE.toSkills(specialistSkills);
+        Set<Skill> skills = skillMapper.toSkills(specialistSkills);
 
         List<QuestionResponse> questionsResponse = new ArrayList<>();
         for (Skill skill : skills) {
             Set<Rate> rates = skill.getScale().getRates();
-            questionsResponse.add(QuestionMapper.INSTANCE.toQuestionResponse(skill, rates));
+            questionsResponse.add(questionMapper.toQuestionResponse(skill, rates));
         }
         return new PageImpl<>(questionsResponse, pageable, specialistSkills.getTotalElements());
     }
@@ -66,7 +77,7 @@ public class UserAssessmentProcessService {
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
 
         Set<AssessorSkillRate> assessorSkillRates = new HashSet<>();
-        for (AssessorSkillRateRequest subRequest : request.assessorSkillRatesRequest()) {
+        for (AssessorSkillRateRequest subRequest : request.assessorSkillRates()) {
             Skill skill = skillRepository.findById(subRequest.skillId())
                     .orElseThrow(() -> new EntityNotFoundException("skill.not.found", subRequest.skillId()));
             assessmentProcessValidator.validateAssessmentProcessSkill(skill, assessmentProcess);
@@ -75,7 +86,7 @@ public class UserAssessmentProcessService {
                     .orElseThrow(() -> new EntityNotFoundException("rate.not.found", subRequest.rateId()));
             assessmentProcessValidator.validateSkillRate(rate, skill);
 
-            AssessorSkillRate assessorSkillRate = AssessorSkillRateMapper.INSTANCE.toAssessorSkillRate(
+            AssessorSkillRate assessorSkillRate = assessorSkillRateMapper.toAssessorSkillRate(
                     assessmentProcess, user, skill, rate);
             assessorSkillRates.add(assessorSkillRate);
         }

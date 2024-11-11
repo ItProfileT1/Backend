@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new IdResponse(id));
     }
 
-    @PostMapping("sign-in")
+    @GetMapping("sign-in")
     @Operation(summary = "Авторизация пользователя")
     public JwtAuthenticationResponse signIn(@RequestBody @Validated SignInRequest request) {
         //TODO сделать обработку ошибок (неверный юзернейм или пароль)

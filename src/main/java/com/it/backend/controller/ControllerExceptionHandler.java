@@ -1,11 +1,13 @@
 package com.it.backend.controller;
 
-import com.it.backend.exception.entity.EntityNotFoundException;
+import com.it.backend.exception.ApplicationRuntimeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,15 +19,32 @@ import java.util.Objects;
 public class ControllerExceptionHandler {
     private final MessageSource messageSource;
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ProblemDetail> handleEntityNotFoundException(EntityNotFoundException exception, Locale locale) {
+    @ExceptionHandler(ApplicationRuntimeException.class)
+    public ResponseEntity<ProblemDetail> appRuntimeException(ApplicationRuntimeException exception, Locale locale) {
         return createProblemDetailResponse(
-                HttpStatus.NOT_FOUND,
+                exception.getHttpStatus(),
                 exception.getMessage(),
-                new Object[]{exception.getId()},
+                exception.getArgs(),
                 locale
         );
     }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ProblemDetail> handleBindException(BindException exception, Locale locale) {
+        var problemDetail = createProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "errors.400.title",
+                new Object[0],
+                locale
+        );
+        problemDetail.setProperty("errors", exception.getAllErrors()
+                .stream()
+                .map(ObjectError::getDefaultMessage)
+                .toList()
+        );
+        return ResponseEntity.badRequest().body(problemDetail);
+    }
+
 
     private ResponseEntity<ProblemDetail> createProblemDetailResponse(
             HttpStatus status,

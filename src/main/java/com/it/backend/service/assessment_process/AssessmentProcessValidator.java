@@ -29,6 +29,10 @@ public class AssessmentProcessValidator {
         if (user.equals(assessmentProcess.getCreator())) {
             // TODO: у пользователя с id= нет доступа к опросу с id=
         }
+
+        if (!assessmentProcess.isExpired()) {
+            // TODO: опрос с id= еще не завершен
+        }
     }
 
     public void checkAssessorAccessToAssessmentProcess(User user, AssessmentProcess assessmentProcess) {

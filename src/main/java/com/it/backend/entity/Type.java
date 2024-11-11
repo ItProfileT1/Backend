@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "skill_types", schema = "it_profile")
+@Table(name = "types", schema = "it_profile")
 public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +25,6 @@ public class Type {
     @OneToMany(mappedBy = "type")
     private Set<Skill> skills;
 
+    @OneToMany(mappedBy = "type")
+    private Set<Category> categories;
 }

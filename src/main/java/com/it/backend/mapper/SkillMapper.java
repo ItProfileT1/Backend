@@ -11,14 +11,12 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface SkillMapper {
-    SkillMapper INSTANCE = Mappers.getMapper(SkillMapper.class);
 
     @Mapping(source = "skillRequest.name", target = "name")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "skillSpecialistsLevels", ignore = true)
     @Mapping(target = "skillRates", ignore = true)
-    @Mapping(target = "positionsSkillsMinLevels", ignore = true)
-    @Mapping(target = "levelsDescriptions", ignore = true)
+    @Mapping(target = "skillLevels", ignore = true)
     Skill toSkill(SkillRequest skillRequest, Type type, Category category, Scale scale);
 
     default Skill toSkill(SpecialistSkill specialistSkill) {
@@ -27,11 +25,7 @@ public interface SkillMapper {
 
     Set<Skill> toSkills(Iterable<SpecialistSkill> specialistSkills);
 
-    @Mapping(source = "type.name", target = "type")
-    @Mapping(source = "category.name", target = "category")
     SkillResponse toSkillResponse(Skill skill);
 
-    @Mapping(source = "type.name", target = "type")
-    @Mapping(source = "category.name", target = "category")
     Set<SkillResponse> toSkillResponses(Set<Skill> skills);
 }

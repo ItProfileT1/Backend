@@ -13,15 +13,10 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface PositionSkillMapper {
-    PositionSkillMapper INSTANCE = Mappers.getMapper(PositionSkillMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "level", target = "minLevel")
-    PositionSkill toPositionSkill(Position position, Skill skill, Level level);
+    PositionSkill toPositionSkill(Position position, Skill skill);
 
-    @Mapping(source = "positionSkill.position", target = "positionResponse")
-    @Mapping(source = "positionSkill.skill", target = "skillResponse")
-    @Mapping(source = "positionSkill.minLevel", target = "levelResponse")
     PositionSkillResponse toPositionSkillResponse(PositionSkill positionSkill);
 
     Set<PositionSkillResponse> toPositionSkillSetResponse(Iterable<PositionSkill> positionSkills);

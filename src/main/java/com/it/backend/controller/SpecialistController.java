@@ -1,7 +1,7 @@
 package com.it.backend.controller;
 
 import com.it.backend.dto.request.ProfileRequest;
-import com.it.backend.dto.request.ProfileResponse;
+import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.service.SpecialistService;
 import com.it.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
