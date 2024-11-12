@@ -23,5 +23,6 @@ public interface CategoryMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "skills", ignore = true)
+    @Mapping(target = "name", source = "categoryRequest.name")
     Category toCategory(CategoryRequest categoryRequest, Type type);
 }

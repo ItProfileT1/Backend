@@ -75,4 +75,11 @@ public class AuthenticationController {
     public Set<RoleResponse> getRoles(){
         return authenticationService.findRoles();
     }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Получение всех пользователей, доступно только администратору")
+    public Set<UserResponse> findAllUsers(){
+        return authenticationService.findAllUsers();
+    }
 }

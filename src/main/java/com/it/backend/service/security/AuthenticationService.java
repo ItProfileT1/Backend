@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -72,5 +73,13 @@ public class AuthenticationService {
 
     public Set<RoleResponse> findIntegrationRoles() {
         return integrationRoleMapper.toRoleResponses(integrationRoleService.findAll());
+    }
+
+    public Set<UserResponse> findAllUsers() {
+        Set<UserResponse> userResponses = new HashSet<>();
+        for (User user : userService.findAll()) {
+            userResponses.add(UserMapper.INSTANCE.toUserResponse(user,null));
+        }
+        return userResponses;
     }
 }
