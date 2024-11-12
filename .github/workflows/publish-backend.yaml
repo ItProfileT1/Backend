@@ -21,15 +21,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --no-cache -t abrodep/t1-it-profile:latest .
-          docker tag abrodep/t1-it-profile:latest abrodep/t1-it-profile:${{ github.sha }}
+          docker build -t abrodep/t1-it-profile:latest .
 
       - name: Push Docker image to Docker Hub
         run: |
           docker push abrodep/t1-it-profile:latest
-          docker push abrodep/t1-it-profile:${{ github.sha }}
-
-      - name: Remove local Docker images to free up space
-        run: |
-          docker rmi abrodep/t1-it-profile:latest
-          docker rmi abrodep/t1-it-profile:${{ github.sha }}
