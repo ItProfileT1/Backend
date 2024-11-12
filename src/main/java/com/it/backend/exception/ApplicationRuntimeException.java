@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class ApplicationRuntimeException extends RuntimeException {
+public abstract class ApplicationRuntimeException extends RuntimeException {
     private final HttpStatus httpStatus;
     private final Object[] args;
 

@@ -2,6 +2,7 @@ package com.it.backend.service;
 
 import com.it.backend.dto.request.TokenGenerationRequest;
 import com.it.backend.entity.ApiClient;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.repository.ApiClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class ApiClientService {
                 return apiClient;
             }
         }
-        throw new EntityNotFoundException(String.format("apiClient.with.token.%s.not.found", token), 0L);
+        throw new EntityNotFoundException("api_client.not.found.by.token", token);
     }
 
     public UserDetailsService userDetailsService() {
@@ -49,8 +50,7 @@ public class ApiClientService {
                 .integrationRole(integrationRoleService.findById(request.integrationRoleId()))
                 .build();
         if (existsByToken(token)) {
-            throw new RuntimeException("Already exists");
-            //TODO ошибка Уже существует
+            throw new DuplicateEntityException("api_client.already.exists", token);
         }
         apiClientRepository.save(apiClient);
     }

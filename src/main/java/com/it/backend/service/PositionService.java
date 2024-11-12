@@ -5,6 +5,7 @@ import com.it.backend.dto.response.PositionResponse;
 import com.it.backend.entity.Position;
 import com.it.backend.entity.PositionSkill;
 import com.it.backend.entity.Skill;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionMapper;
 import com.it.backend.mapper.SkillMapper;
@@ -60,7 +61,7 @@ public class PositionService {
     public PositionResponse createPosition(PositionRequest request) {
         Position position = positionMapper.toPosition(request);
         if (positionRepository.existsByName(position.getName())) {
-            //TODO сделать обработку ошибки в случае если должность уже существует
+            throw new DuplicateEntityException("position.already.exists", request.name());
         }
         return positionMapper.toPositionResponse(
                 positionRepository.save(position),

@@ -3,6 +3,7 @@ package com.it.backend.service;
 import com.it.backend.dto.request.ScaleRequest;
 import com.it.backend.dto.response.ScaleResponse;
 import com.it.backend.entity.Scale;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.ScaleMapper;
 import com.it.backend.repository.ScaleRepository;
@@ -20,7 +21,7 @@ public class ScaleService {
 
     public ScaleResponse createScale(ScaleRequest request) {
         if (scaleRepository.existsByName(request.name())) {
-            // TODO: throw new RuntimeException("Scale already exists");
+            throw new DuplicateEntityException("scale.already.exists", request.name());
         }
         Scale scale = scaleMapper.toScale(request);
         return scaleMapper.toScaleResponse(scaleRepository.save(scale));

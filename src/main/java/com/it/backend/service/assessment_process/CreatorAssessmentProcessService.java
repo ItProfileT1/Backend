@@ -6,6 +6,7 @@ import com.it.backend.dto.request.SkillLevelsRequest;
 import com.it.backend.dto.response.AssessmentProcessResponse;
 import com.it.backend.dto.response.ResultResponse;
 import com.it.backend.entity.*;
+import com.it.backend.exception.assessment_process.AssessmentProcessSchedulerException;
 import com.it.backend.mapper.AssessmentProcessAssessorStatusMapper;
 import com.it.backend.mapper.AssessmentProcessMapper;
 import com.it.backend.mapper.AssessorSkillRateMapper;
@@ -27,6 +28,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+
 public class CreatorAssessmentProcessService {
     private final Scheduler scheduler;
     private final SpecialistSkillRepository specialistSkillRepository;
@@ -131,7 +133,7 @@ public class CreatorAssessmentProcessService {
                     .build();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            // TODO
+            throw new AssessmentProcessSchedulerException();
         }
     }
 
