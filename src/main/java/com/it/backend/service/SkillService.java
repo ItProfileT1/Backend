@@ -10,7 +10,7 @@ import com.it.backend.entity.Type;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.CategoryMapper;
 import com.it.backend.mapper.SkillMapper;
-import com.it.backend.mapper.skills.TypeMapper;
+import com.it.backend.mapper.TypeMapper;
 import com.it.backend.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,8 +36,37 @@ public class SkillService {
                 .orElseThrow(() -> new EntityNotFoundException("skill.not.found", id));
     }
 
+    public Set<SkillResponse> findAll(String typeName){
+        if (typeName == null){
+            return skillMapper.toSkillResponses(skillRepository.findAll());
+        }
+        Set<Skill> skills = new HashSet<>();
+        for (Skill skill : skillRepository.findAll()) {
+            if (typeService.findByName(typeName).equals(skill.getType())){
+                skills.add(skill);
+            }
+        }
+        return skillMapper.toSkillResponses(skills);
+    }
+
+    public SkillResponse create(SkillRequest request){
+        Skill skill = skillMapper.toSkill(
+                request,
+                typeService.findById(request.typeId()),
+                request.categoryId().map(categoryService::findById).orElse(null),
+                scaleService.findById(request.scaleId()));
+        var existingSkill = skillRepository.findByName(skill.getName());
+        if (existingSkill.isPresent()) {
+            //TODO Вернуть исключение
+            return skillMapper.toSkillResponse(existingSkill.get());
+        }
+        skillRepository.save(skill);
+        return skillMapper.toSkillResponse(skill);
+    }
+
     @Transactional(readOnly = true)
-    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAll(String typeName){
+    @Deprecated
+    public Map<TypeResponse, Map<CategoryResponse, Set<SkillResponse>>> findAllD(String typeName){
         Map<Type, Map<Category, Set<Skill>>> skills = new HashMap<>();
         for (Skill skill : skillRepository.findAll()) {
             Type type;
@@ -83,7 +112,8 @@ public class SkillService {
     }
 
     @Transactional
-    public Map<TypeResponse, Map<CategoryResponse, SkillResponse>> create(SkillRequest request) {
+    @Deprecated
+    public Map<TypeResponse, Map<CategoryResponse, SkillResponse>> createD(SkillRequest request) {
         Skill skill = skillMapper.toSkill(
                 request,
                 typeService.findById(request.typeId()),
@@ -98,6 +128,7 @@ public class SkillService {
         return toFullResponse(skill);
     }
 
+    @Deprecated
     private Map<TypeResponse, Map<CategoryResponse, SkillResponse>> toFullResponse(Skill skill){
         var typeResponse = TypeMapper.INSTANCE.toTypeResponse(skill.getType());
         Category category = new Category();

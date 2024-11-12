@@ -11,7 +11,7 @@ public record ProfileResponse(
         LocalDate birthday,
         String city,
         String sex,
-        PositionResponse positions,
-        Set<SkillResponse> skills
+        PositionResponse positionResponse,
+        Set<SkillResponse> skillResponses
 ) {
 }

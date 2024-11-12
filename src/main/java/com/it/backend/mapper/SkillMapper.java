@@ -26,5 +26,5 @@ public interface SkillMapper {
 
     SkillResponse toSkillResponse(Skill skill);
 
-    Set<SkillResponse> toSkillResponses(Set<Skill> skills);
+    Set<SkillResponse> toSkillResponses(Iterable<Skill> skills);
 }

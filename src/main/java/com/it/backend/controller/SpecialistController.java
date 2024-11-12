@@ -18,9 +18,6 @@ import java.util.Set;
 @Tag(name = "Специалисты и их профили")
 public class SpecialistController {
     //изменить профайл респонс
-    //юзер дитейлс из методов оценки
-    //Добавить методы круд к скиллам и профилям если это нужно фронту
-    //Возможно добавить еще какие то методы для руководителя и админа, регистрация мастера
     //Прочитать у марины про возможность зарпрета каких то методово ролям
     private final SpecialistService specialistService;
     private final UserService userService;
