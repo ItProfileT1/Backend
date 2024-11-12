@@ -1,4 +1,4 @@
-package com.it.backend.mapper.skills;
+package com.it.backend.mapper;
 
 import com.it.backend.dto.response.TypeResponse;
 import com.it.backend.entity.Type;

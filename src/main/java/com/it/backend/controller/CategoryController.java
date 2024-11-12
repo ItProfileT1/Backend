@@ -23,15 +23,15 @@ public class CategoryController {
     private final CategoryMapper categoryMapper;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Получение всех категорий, доступно только администратору")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение всех категорий, доступно администратору и специалисту")
     public Set<CategoryResponse> findAll(){
         return categoryService.findAll();
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Получение категории по айди, доступно только администратору")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение категории по айди, доступно только администратору и специалисту")
     public CategoryResponse findById(@PathVariable Long id){
         return categoryMapper.toCategoryResponse(categoryService.findById(id));
     }

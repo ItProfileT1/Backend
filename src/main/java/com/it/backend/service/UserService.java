@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
+    private final UserRepository userRepository;
 
     public User save(User user) {
         return repository.save(user);
@@ -38,4 +39,7 @@ public class UserService {
         return getByUsername(username);
     }
 
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
+    }
 }
