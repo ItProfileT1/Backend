@@ -6,12 +6,14 @@ import com.it.backend.dto.request.SkillLevelsRequest;
 import com.it.backend.dto.response.AssessmentProcessResponse;
 import com.it.backend.dto.response.ResultResponse;
 import com.it.backend.entity.*;
-import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.AssessmentProcessAssessorStatusMapper;
 import com.it.backend.mapper.AssessmentProcessMapper;
 import com.it.backend.mapper.AssessorSkillRateMapper;
 import com.it.backend.mapper.SpecialistSkillMapper;
 import com.it.backend.repository.*;
+import com.it.backend.service.LevelService;
+import com.it.backend.service.SkillService;
+import com.it.backend.service.SpecialistService;
 import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
@@ -27,14 +29,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CreatorAssessmentProcessService {
     private final Scheduler scheduler;
-    private final UserRepository userRepository;
     private final SpecialistSkillRepository specialistSkillRepository;
     private final AssessmentProcessRepository assessmentProcessRepository;
     private final AssessorSkillRateRepository assessorSkillRateRepository;
-    private final SkillRepository skillRepository;
+    private final SkillService skillService;
     private final AssessmentProcessAssessorStatusRepository assessmentProcessAssessorStatusRepository;
-    private final LevelRepository levelRepository;
-    private final SpecialistRepository specialistRepository;
+    private final UserService userService;
+    private final LevelService levelService;
+    private final SpecialistService specialistService;
+    private final AssessmentProcessService assessmentProcessService;
     private final AssessmentProcessValidator assessmentProcessValidator;
     private final AssessmentProcessSummarizer assessmentProcessSummarizer;
     private final SkillLevelRepository skillLevelRepository;
@@ -42,12 +45,11 @@ public class CreatorAssessmentProcessService {
     private final AssessmentProcessMapper assessmentProcessMapper;
     private final AssessorSkillRateMapper assessorSkillRateMapper;
     private final AssessmentProcessAssessorStatusMapper assessmentProcessAssessorStatusMapper;
-    private final UserService userService;
 
     @Transactional
     public Set<AssessmentProcessResponse> createAssessmentProcess(AssessmentProcessRequest request) {
         User user = userService.getCurrentUser();
-        Specialist specialist = getSpecialistById(request.specialistId());
+        Specialist specialist = specialistService.findById(request.specialistId());
         assessmentProcessValidator.validateSpecialist(specialist);
 
         AssessmentProcess assessmentProcess = assessmentProcessMapper.toAssessmentProcess(
@@ -61,12 +63,12 @@ public class CreatorAssessmentProcessService {
         Set<AssessmentProcessAssessorStatus> assessmentProcessAssessorStatuses = new HashSet<>();
 
         for (Long assessorId : request.assessorsIds()) {
-            User assessor = getUserById(assessorId);
-            AssessmentProcessAssessorStatus assessmentProcessAssessorStatus = getAssessmentProcessAssessorStatus(
-                    assessmentProcess, user, Status.AWAITING);
+            User assessor = userService.getById(assessorId);
+            AssessmentProcessAssessorStatus assessmentProcessAssessorStatus =
+                    assessmentProcessAssessorStatusMapper.toAssessmentProcessAssessorStatus(assessmentProcess, user, Status.AWAITING);
             assessmentProcessAssessorStatuses.add(assessmentProcessAssessorStatus);
             for (Skill skill : skillsForAssessment) {
-                assessorSkillRates.add(getAssessmentProcessAssessorSkillRate(assessmentProcess, assessor, skill));
+                assessorSkillRates.add(assessorSkillRateMapper.toAssessorSkillRate(assessmentProcess, assessor, skill));
             }
         }
         assessmentProcessRepository.save(assessmentProcess);
@@ -85,7 +87,7 @@ public class CreatorAssessmentProcessService {
 
     public Set<ResultResponse> getResultsByAssessmentProcessId(Long id) {
         User user = userService.getCurrentUser();
-        AssessmentProcess assessmentProcess = getAssessmentProcessById(id);
+        AssessmentProcess assessmentProcess = assessmentProcessService.findById(id);
         assessmentProcessValidator.checkCreatorAccessToAssessmentProcess(user, assessmentProcess);
         Set<SpecialistSkill> specialistSkillLevels = assessmentProcessSummarizer.summarizeResults(assessmentProcess);
         Set<ResultResponse> resultsResponse = new HashSet<>();
@@ -98,18 +100,16 @@ public class CreatorAssessmentProcessService {
     }
 
     @Transactional
-    public Set<AssessmentProcessResponse> approveResultsByAssessmentProcessId(
-            Long id, SkillLevelsRequest request
-    ) {
+    public Set<AssessmentProcessResponse> approveResultsByAssessmentProcessId(Long id, SkillLevelsRequest request) {
         User user = userService.getCurrentUser();
-        AssessmentProcess assessmentProcess = getAssessmentProcessById(id);
+        AssessmentProcess assessmentProcess = assessmentProcessService.findById(id);
         assessmentProcessValidator.checkCreatorAccessToAssessmentProcess(user, assessmentProcess);
 
         Specialist specialist = assessmentProcess.getSpecialist();
         for (SkillLevelRequest subRequest : request.skillLevels()) {
-            Skill skill = getSkillById(subRequest.skillId());
+            Skill skill = skillService.findById(subRequest.skillId());
             assessmentProcessValidator.validateAssessmentProcessSkill(skill, assessmentProcess);
-            Level level = getLevelById(subRequest.levelId());
+            Level level = levelService.findById(subRequest.levelId());
             SpecialistSkill specialistSkillLevel = specialistSkillRepository.findBySpecialistAndSkill(specialist, skill);
             specialistSkillMapper.updateSpecialistSkill(specialistSkillLevel, level, request.date());
         }
@@ -135,59 +135,13 @@ public class CreatorAssessmentProcessService {
         }
     }
 
-    public void closeAssessmentProcessById(Long id) {
-        AssessmentProcess assessmentProcess = getAssessmentProcessById(id);
-        Set<AssessmentProcessAssessorStatus> assessmentProcessAssessorStatuses
-                = assessmentProcessAssessorStatusRepository.findByAssessmentProcess(assessmentProcess);
-        for (AssessmentProcessAssessorStatus assessmentProcessAssessorStatus : assessmentProcessAssessorStatuses) {
-            assessmentProcessAssessorStatus.setStatus(Status.IGNORED);
-        }
-    }
-
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("user.not.found", id));
-    }
-
-    private Specialist getSpecialistById(Long id) {
-        return specialistRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("specialist.not.found", id));
-    }
-
-    private AssessmentProcess getAssessmentProcessById(Long id) {
-        return assessmentProcessRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
-    }
-
-    private Level getLevelById(Long id) {
-        return levelRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("level.not.found", id));
-    }
-
-    private Skill getSkillById(Long id) {
-        return skillRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("skill.not.found", id));
-    }
-
     private Set<Skill> getSkillsValidatedBySpecialist(Set<Long> ids, Specialist specialist) {
         Set<Skill> skills = new HashSet<>();
         for (Long id : ids) {
-            Skill skill = getSkillById(id);
+            Skill skill = skillService.findById(id);
             assessmentProcessValidator.validateSpecialistSkill(specialist, skill);
             skills.add(skill);
         }
         return skills;
-    }
-
-    private AssessorSkillRate getAssessmentProcessAssessorSkillRate(
-            AssessmentProcess assessmentProcess, User assessor, Skill skill
-    ) {
-        return assessorSkillRateMapper.toAssessorSkillRate(assessmentProcess, assessor, skill);
-    }
-
-    private AssessmentProcessAssessorStatus getAssessmentProcessAssessorStatus(
-            AssessmentProcess assessmentProcess, User user, Status status
-    ) {
-        return assessmentProcessAssessorStatusMapper.toAssessmentProcessAssessorStatus(assessmentProcess, user, status);
     }
 }

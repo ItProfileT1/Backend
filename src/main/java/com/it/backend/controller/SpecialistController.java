@@ -47,6 +47,6 @@ public class SpecialistController {
     @Operation(summary = "Получение специалиста по айди, доступно только администратору и p2p сервису")
     @PreAuthorize("hasAnyRole('P2P', 'ADMIN')")
     public ProfileResponse findProfileByPosition(@PathVariable Long id) {
-        return specialistService.findById(id);
+        return specialistService.getProfileById(id);
     }
 }

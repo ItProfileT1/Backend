@@ -7,11 +7,11 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 @RequiredArgsConstructor
 public class AssessmentProcessClosingJob extends QuartzJobBean {
 
-    private final CreatorAssessmentProcessService creatorAssessmentProcessService;
+    private final AssessmentProcessService assessmentProcessService;
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
         Long assessmentProcessId = context.getJobDetail().getJobDataMap().getLong("assessmentProcessId");
-        creatorAssessmentProcessService.closeAssessmentProcessById(assessmentProcessId);
+        assessmentProcessService.closeAssessmentProcessById(assessmentProcessId);
     }
 }
