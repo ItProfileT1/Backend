@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class IntegrationRoleService {
     private final IntegrationRoleRepository integrationRoleRepository;
 
-    public Iterable<IntegrationRole> findALl(){
+    public Iterable<IntegrationRole> findAll(){
         return integrationRoleRepository.findAll();
     }
 

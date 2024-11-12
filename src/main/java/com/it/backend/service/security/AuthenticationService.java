@@ -8,8 +8,10 @@ import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.TokenAuthenticationResponse;
 import com.it.backend.dto.response.UserResponse;
 import com.it.backend.entity.User;
+import com.it.backend.mapper.IntegrationRoleMapper;
 import com.it.backend.mapper.UserMapper;
 import com.it.backend.service.ApiClientService;
+import com.it.backend.service.IntegrationRoleService;
 import com.it.backend.service.RoleService;
 import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ public class AuthenticationService {
     private final RoleService roleService;
     private final ApiClientService apiClientService;
     private final ApiTokenService apiTokenService;
+    private final IntegrationRoleService integrationRoleService;
+    private final IntegrationRoleMapper integrationRoleMapper;
 
     public UserResponse signUp(SignUpRequest request) {
         var user = User.builder()
@@ -66,4 +70,7 @@ public class AuthenticationService {
         return new TokenAuthenticationResponse(token);
     }
 
+    public Set<RoleResponse> findIntegrationRoles() {
+        return integrationRoleMapper.toRoleResponses(integrationRoleService.findAll());
+    }
 }

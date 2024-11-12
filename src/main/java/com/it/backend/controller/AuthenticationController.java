@@ -62,6 +62,13 @@ public class AuthenticationController {
         return authenticationService.generateIntegrationToken(tokenGenerationRequest);
     }
 
+    @GetMapping("integration/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Получение ролей для интеграции")
+    public Set<RoleResponse> getIntegrationRoles(){
+        return authenticationService.findIntegrationRoles();
+    }
+
     @GetMapping("roles")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Получение всех ролей, доступно только администратору")
