@@ -32,4 +32,6 @@ public class SkillController {
     public SkillResponse createSkill(@RequestBody SkillRequest request){
         return skillService.create(request);
     }
+
+
 }
