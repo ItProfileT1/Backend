@@ -17,8 +17,6 @@ import java.util.Set;
 @RequestMapping("api/v1/specialists")
 @Tag(name = "Специалисты и их профили")
 public class SpecialistController {
-    //изменить профайл респонс
-    //Прочитать у марины про возможность зарпрета каких то методово ролям
     private final SpecialistService specialistService;
     private final UserService userService;
 
