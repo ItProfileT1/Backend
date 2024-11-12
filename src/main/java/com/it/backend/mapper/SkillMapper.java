@@ -1,7 +1,6 @@
 package com.it.backend.mapper;
 
 import com.it.backend.dto.request.SkillRequest;
-import com.it.backend.dto.response.LevelResponse;
 import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.*;
@@ -35,8 +34,5 @@ public interface SkillMapper {
     Set<SkillResponse> toSkillResponses(Iterable<Skill> skills);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    LevelResponse toLevelResponse(Level level);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    SkillLevelResponse toSkillLevelResponse(SkillLevel skillLevel);
+    SkillLevelResponse toSkillLevelResponse(SpecialistSkill specialistSkill);
 }

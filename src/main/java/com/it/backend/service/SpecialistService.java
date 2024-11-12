@@ -6,7 +6,6 @@ import com.it.backend.entity.Specialist;
 import com.it.backend.entity.User;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionMapper;
-import com.it.backend.mapper.SkillMapper;
 import com.it.backend.mapper.SpecialistMapper;
 import com.it.backend.repository.SpecialistRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class SpecialistService {
     private final SpecialistSkillService specialistSkillService;
     private final SpecialistRepository specialistRepository;
     private final PositionService positionService;
-    private final SkillMapper skillMapper;
     private final SpecialistMapper specialistMapper;
     private final PositionMapper positionMapper;
 
