@@ -25,28 +25,28 @@ public class CategoryController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Получение всех категорий, доступно администратору и специалисту")
-    public Set<CategoryResponse> findAll(){
+    public Set<CategoryResponse> findAll() {
         return categoryService.findAll();
     }
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Получение категории по айди, доступно только администратору и специалисту")
-    public CategoryResponse findById(@PathVariable Long id){
+    public CategoryResponse findById(@PathVariable Long id) {
         return categoryMapper.toCategoryResponse(categoryService.findById(id));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Создание категории, доступно только администратору")
-    public CategoryResponse create(@RequestBody CategoryRequest categoryRequest){
+    public CategoryResponse create(@RequestBody CategoryRequest categoryRequest) {
         return categoryMapper.toCategoryResponse(categoryService.create(categoryRequest));
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Удаление категории, доступно только администратору")
-    public ResponseEntity<?> deleteById(@PathVariable Long id){
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }

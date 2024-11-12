@@ -4,10 +4,8 @@ import com.it.backend.dto.response.ResultResponse;
 import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.entity.*;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {SkillMapper.class, LevelMapper.class})
 public interface SpecialistSkillMapper {

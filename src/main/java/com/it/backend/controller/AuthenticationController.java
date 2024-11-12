@@ -49,7 +49,7 @@ public class AuthenticationController {
                                     @ExampleObject(name = "Admin Login", value = "{\"username\": \"admin\", \"password\": \"admin\"}"),
                                     @ExampleObject(name = "User Login", value = "{\"username\": \"joe\", \"password\": \"user\"}"),
                                     @ExampleObject(name = "Master Login", value = "{\"username\": \"master\", \"password\": \"master\"}")
-                    }))
+                            }))
             @RequestBody @Validated SignInRequest request) {
         return authenticationService.signIn(request);
         //TODO сделать обработку ошибок (неверный юзернейм или пароль)
@@ -58,28 +58,28 @@ public class AuthenticationController {
     @PostMapping("integration/sign-up")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Генерация токена для интеграции, доступно только администратору")
-    public TokenAuthenticationResponse generateToken(@RequestBody TokenGenerationRequest tokenGenerationRequest){
+    public TokenAuthenticationResponse generateToken(@RequestBody TokenGenerationRequest tokenGenerationRequest) {
         return authenticationService.generateIntegrationToken(tokenGenerationRequest);
     }
 
     @GetMapping("integration/roles")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Получение ролей для интеграции")
-    public Set<RoleResponse> getIntegrationRoles(){
+    public Set<RoleResponse> getIntegrationRoles() {
         return authenticationService.findIntegrationRoles();
     }
 
     @GetMapping("roles")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Получение всех ролей, доступно только администратору")
-    public Set<RoleResponse> getRoles(){
+    public Set<RoleResponse> getRoles() {
         return authenticationService.findRoles();
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Получение всех пользователей, доступно только администратору")
-    public Set<UserResponse> findAllUsers(){
+    public Set<UserResponse> findAllUsers() {
         return authenticationService.findAllUsers();
     }
 }

@@ -26,7 +26,7 @@ public class SpecialistService {
     private final PositionMapper positionMapper;
 
     @Transactional
-    public ProfileResponse createProfile(ProfileRequest request, User user){
+    public ProfileResponse createProfile(ProfileRequest request, User user) {
         Specialist specialist = specialistMapper.toSpecialist(request);
         request.positionId()
                 .map(positionService::findById)
@@ -42,7 +42,7 @@ public class SpecialistService {
         //TODO specialistSkillsLevels поменять на specialistSkills
     }
 
-    public ProfileResponse getProfileByUser(User user){
+    public ProfileResponse getProfileByUser(User user) {
         var specialist = specialistRepository.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException("specialist.not.found", user.getId()));
         return getProfileBySpecialist(specialist);
@@ -54,25 +54,24 @@ public class SpecialistService {
         return specialistMapper.toProfileResponse(specialist, positionResponse, skillLevelResponses);
     }
 
-    public Specialist saveSpecialist(Specialist specialist){
+    public Specialist saveSpecialist(Specialist specialist) {
         if (!specialistRepository.existsByUser(specialist.getUser()))
             return specialistRepository.save(specialist);
         throw new RuntimeException("Профиль уже существует");
         //TODO обработка ошибок
     }
 
-    public Specialist updateSpecialist(Specialist specialist){
+    public Specialist updateSpecialist(Specialist specialist) {
         if (specialistRepository.existsByUser(specialist.getUser()))
             return specialistRepository.save(specialist);
         throw new EntityNotFoundException("specialist.not.found", specialist.getId());
     }
 
-    public Set<ProfileResponse> findByPosition(String positionName){
+    public Set<ProfileResponse> findByPosition(String positionName) {
         Iterable<Specialist> specialists;
         if (positionName == null) {
             specialists = specialistRepository.findAll();
-        }
-        else {
+        } else {
             specialists = positionService.findPositionByName(positionName).getSpecialists();
         }
         Set<ProfileResponse> profileResponses = new HashSet<>();

@@ -19,16 +19,16 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final TypeService typeService;
 
-    public Category findById(Long id){
-        return categoryRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("category.not.found", id));
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("category.not.found", id));
     }
 
-    public Set<CategoryResponse> findAll(){
+    public Set<CategoryResponse> findAll() {
         return categoryMapper.toCategoryResponses(categoryRepository.findAll());
     }
 
     public Category create(CategoryRequest categoryRequest) {
-        if (categoryRepository.existsByName(categoryRequest.name())){
+        if (categoryRepository.existsByName(categoryRequest.name())) {
             throw new RuntimeException(String.format("category with name %s already exists", categoryRequest.name()));
         }
         Category category = categoryMapper.toCategory(categoryRequest, typeService.findById(categoryRequest.typeId()));

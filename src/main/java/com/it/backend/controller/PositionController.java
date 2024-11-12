@@ -37,7 +37,7 @@ public class PositionController {
     @GetMapping()
     @Operation(summary = "Получение всех должностей, доступно только администратору и специалисту")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Set<PositionResponse> findAllPositions(){
+    public Set<PositionResponse> findAllPositions() {
         return positionService.findAllPositions();
     }
 

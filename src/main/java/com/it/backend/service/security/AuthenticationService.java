@@ -1,9 +1,9 @@
 package com.it.backend.service.security;
 
-import com.it.backend.dto.request.TokenGenerationRequest;
-import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
+import com.it.backend.dto.request.TokenGenerationRequest;
+import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.TokenAuthenticationResponse;
 import com.it.backend.dto.response.UserResponse;
@@ -46,7 +46,7 @@ public class AuthenticationService {
         return UserMapper.INSTANCE.toUserResponse(user, request.password());
     }
 
-    public JwtAuthenticationResponse signIn(SignInRequest request){
+    public JwtAuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.username(),
                 request.password()
@@ -78,7 +78,7 @@ public class AuthenticationService {
     public Set<UserResponse> findAllUsers() {
         Set<UserResponse> userResponses = new HashSet<>();
         for (User user : userService.findAll()) {
-            userResponses.add(UserMapper.INSTANCE.toUserResponse(user,null));
+            userResponses.add(UserMapper.INSTANCE.toUserResponse(user, null));
         }
         return userResponses;
     }

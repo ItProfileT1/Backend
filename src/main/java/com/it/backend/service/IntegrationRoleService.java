@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class IntegrationRoleService {
     private final IntegrationRoleRepository integrationRoleRepository;
 
-    public Iterable<IntegrationRole> findAll(){
+    public Iterable<IntegrationRole> findAll() {
         return integrationRoleRepository.findAll();
     }
 
-    public IntegrationRole findById(Long id){
+    public IntegrationRole findById(Long id) {
         return integrationRoleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("integration_role.not.found", id));
     }

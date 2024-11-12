@@ -4,10 +4,8 @@ import com.it.backend.dto.response.PositionSkillResponse;
 import com.it.backend.entity.Position;
 import com.it.backend.entity.PositionSkill;
 import com.it.backend.entity.Skill;
-import com.it.backend.entity.Level;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
 
