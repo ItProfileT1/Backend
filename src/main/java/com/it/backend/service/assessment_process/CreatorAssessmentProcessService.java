@@ -91,7 +91,8 @@ public class CreatorAssessmentProcessService {
         Set<ResultResponse> resultsResponse = new HashSet<>();
         for (SpecialistSkill specialistSkillLevel : specialistSkillLevels) {
             SkillLevel skillLevel = skillLevelRepository.findBySkillAndLevel(specialistSkillLevel.getSkill(), specialistSkillLevel.getLevel());
-            resultsResponse.add(specialistSkillMapper.toResultResponse(specialistSkillLevel, skillLevel));
+            Set<String> comments = assessorSkillRateRepository.findCommentsBySkill(specialistSkillLevel.getSkill());
+            resultsResponse.add(specialistSkillMapper.toResultResponse(specialistSkillLevel, skillLevel, comments));
         }
         return resultsResponse;
     }

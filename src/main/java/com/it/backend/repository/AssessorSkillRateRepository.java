@@ -21,4 +21,7 @@ public interface AssessorSkillRateRepository extends JpaRepository<AssessorSkill
     Set<AssessorSkillRate> findAllAssessorSkillRatesByAssessmentProcess(
             @Param("assessmentProcess") AssessmentProcess assessmentProcess,
             @Param("status") Status status);
+
+    @Query(value = "SELECT asr.comment from AssessorSkillRate asr WHERE asr.skill = :skill AND asr.comment IS NOT NULL")
+    Set<String> findCommentsBySkill(@Param("skill") Skill skill);
 }

@@ -6,6 +6,7 @@ import com.it.backend.entity.*;
 import org.mapstruct.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {SkillMapper.class, LevelMapper.class})
 public interface SpecialistSkillMapper {
@@ -20,7 +21,7 @@ public interface SpecialistSkillMapper {
 
     @Mapping(source = "specialistSkill.skill", target = "skill")
     @Mapping(source = "specialistSkill.level", target = "level")
-    ResultResponse toResultResponse(SpecialistSkill specialistSkill, SkillLevel skillLevel);
+    ResultResponse toResultResponse(SpecialistSkill specialistSkill, SkillLevel skillLevel, Set<String> comments);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

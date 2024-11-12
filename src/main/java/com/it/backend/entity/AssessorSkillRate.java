@@ -16,6 +16,9 @@ public class AssessorSkillRate {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "comment")
+    private String comment;
+
     @ManyToOne
     @JoinColumn(name = "assessment_process_id")
     private AssessmentProcess assessmentProcess;

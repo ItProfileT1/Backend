@@ -12,5 +12,5 @@ public interface AssessorSkillRateMapper {
     AssessorSkillRate toAssessorSkillRate(AssessmentProcess assessmentProcess, User assessor, Skill skill);
 
     @Mapping(target = "id", ignore = true)
-    AssessorSkillRate toAssessorSkillRate(AssessmentProcess assessmentProcess, User assessor, Skill skill, Rate rate);
+    AssessorSkillRate toAssessorSkillRate(AssessmentProcess assessmentProcess, User assessor, Skill skill, Rate rate, String comment);
 }
