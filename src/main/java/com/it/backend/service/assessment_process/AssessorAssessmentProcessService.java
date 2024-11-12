@@ -11,12 +11,12 @@ import com.it.backend.mapper.AssessorSkillRateMapper;
 import com.it.backend.mapper.QuestionMapper;
 import com.it.backend.mapper.SkillMapper;
 import com.it.backend.repository.*;
+import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,15 +40,16 @@ public class AssessorAssessmentProcessService {
     private final QuestionMapper questionMapper;
     private final AssessmentProcessMapper assessmentProcessMapper;
     private final AssessorSkillRateMapper assessorSkillRateMapper;
+    private final UserService userService;
 
-    public Set<AssessmentProcessResponse> getAssignedAssessmentProcesses(UserDetails userDetails) {
-        User user = (User) userDetails;
+    public Set<AssessmentProcessResponse> getAssignedAssessmentProcesses() {
+        User user = userService.getCurrentUser();
         user.setAssessmentProcesses(assessmentProcessRepository.findAllAssessmentProcessesByAssessor(user, Status.AWAITING, OffsetDateTime.now()));
         return assessmentProcessMapper.toAssessmentProcessesResponse(user.getAssessmentProcesses());
     }
 
-    public Page<QuestionResponse> getQuestionsByAssessmentProcessId(Long id, UserDetails userDetails, int page, int size) {
-        User user = (User) userDetails;
+    public Page<QuestionResponse> getQuestionsByAssessmentProcessId(Long id, int page, int size) {
+        User user = userService.getCurrentUser();
         AssessmentProcess assessmentProcess = assessmentProcessRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
@@ -69,9 +70,9 @@ public class AssessorAssessmentProcessService {
 
     @Transactional
     public Set<AssessmentProcessResponse> saveRatesByAssessmentProcessId(
-            Long id, UserDetails userDetails, AssessorSkillRatesRequest request
+            Long id, AssessorSkillRatesRequest request
     ) {
-        User user = (User) userDetails;
+        User user = userService.getCurrentUser();
         AssessmentProcess assessmentProcess = assessmentProcessRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
@@ -96,6 +97,6 @@ public class AssessorAssessmentProcessService {
                 assessmentProcessAssessorStatusRepository.findByAssessmentProcessAndAssessor(assessmentProcess, user);
         assessmentProcessAssessorStatus.setStatus(Status.COMPLETED);
 
-        return getAssignedAssessmentProcesses(userDetails);
+        return getAssignedAssessmentProcesses();
     }
 }

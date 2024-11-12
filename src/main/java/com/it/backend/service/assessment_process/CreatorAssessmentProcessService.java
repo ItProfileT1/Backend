@@ -12,9 +12,9 @@ import com.it.backend.mapper.AssessmentProcessMapper;
 import com.it.backend.mapper.AssessorSkillRateMapper;
 import com.it.backend.mapper.SpecialistSkillMapper;
 import com.it.backend.repository.*;
+import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +42,11 @@ public class CreatorAssessmentProcessService {
     private final AssessmentProcessMapper assessmentProcessMapper;
     private final AssessorSkillRateMapper assessorSkillRateMapper;
     private final AssessmentProcessAssessorStatusMapper assessmentProcessAssessorStatusMapper;
+    private final UserService userService;
 
     @Transactional
-    public Set<AssessmentProcessResponse> createAssessmentProcess(UserDetails userDetails, AssessmentProcessRequest request) {
-        User user = (User) userDetails;
+    public Set<AssessmentProcessResponse> createAssessmentProcess(AssessmentProcessRequest request) {
+        User user = userService.getCurrentUser();
         Specialist specialist = getSpecialistById(request.specialistId());
         assessmentProcessValidator.validateSpecialist(specialist);
 
@@ -73,17 +74,17 @@ public class CreatorAssessmentProcessService {
         assessmentProcessAssessorStatusRepository.saveAll(assessmentProcessAssessorStatuses);
 
         createAssessmentProcessClosingTask(assessmentProcess);
-        return getCreatedAssessmentProcesses(userDetails);
+        return getCreatedAssessmentProcesses();
     }
 
-    public Set<AssessmentProcessResponse> getCreatedAssessmentProcesses(UserDetails userDetails) {
-        User user = (User) userDetails;
+    public Set<AssessmentProcessResponse> getCreatedAssessmentProcesses() {
+        User user = userService.getCurrentUser();
         Set<AssessmentProcess> createdAssessmentProcesses = assessmentProcessRepository.findAssessmentProcessesByCreator(user);
         return assessmentProcessMapper.toAssessmentProcessesResponse(createdAssessmentProcesses);
     }
 
-    public Set<ResultResponse> getResultsByAssessmentProcessId(Long id, UserDetails userDetails) {
-        User user = (User) userDetails;
+    public Set<ResultResponse> getResultsByAssessmentProcessId(Long id) {
+        User user = userService.getCurrentUser();
         AssessmentProcess assessmentProcess = getAssessmentProcessById(id);
         assessmentProcessValidator.checkCreatorAccessToAssessmentProcess(user, assessmentProcess);
         Set<SpecialistSkill> specialistSkillLevels = assessmentProcessSummarizer.summarizeResults(assessmentProcess);
@@ -97,9 +98,9 @@ public class CreatorAssessmentProcessService {
 
     @Transactional
     public Set<AssessmentProcessResponse> approveResultsByAssessmentProcessId(
-            Long id, UserDetails userDetails, SkillLevelsRequest request
+            Long id, SkillLevelsRequest request
     ) {
-        User user = (User) userDetails;
+        User user = userService.getCurrentUser();
         AssessmentProcess assessmentProcess = getAssessmentProcessById(id);
         assessmentProcessValidator.checkCreatorAccessToAssessmentProcess(user, assessmentProcess);
 
@@ -115,7 +116,7 @@ public class CreatorAssessmentProcessService {
         assessmentProcessAssessorStatusRepository.removeByAssessmentProcess(assessmentProcess);
         assessmentProcessRepository.delete(assessmentProcess);
 
-        return getCreatedAssessmentProcesses(userDetails);
+        return getCreatedAssessmentProcesses();
     }
 
     private void createAssessmentProcessClosingTask(AssessmentProcess assessmentProcess) {

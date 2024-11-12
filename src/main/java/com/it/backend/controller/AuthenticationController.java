@@ -37,7 +37,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("sign-in")
+    @PostMapping("sign-in")
     @Operation(summary = "Авторизация пользователя")
     public JwtAuthenticationResponse signIn(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Данные для входа", required = true,

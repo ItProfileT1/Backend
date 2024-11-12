@@ -14,8 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -33,26 +31,23 @@ public class AssessmentProcessController {
     @PreAuthorize("hasRole('MASTER')")
     @Operation(summary = "Создание опроса, доступно только руководителю")
     public Set<AssessmentProcessResponse> createAssessmentProcess(
-            @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody AssessmentProcessRequest request) {
-        return creatorAssessmentProcessService.createAssessmentProcess(userDetails, request);
+        return creatorAssessmentProcessService.createAssessmentProcess(request);
     }
 
     @GetMapping("created")
     @PreAuthorize("hasRole('MASTER')")
     @Operation(summary = "Получение всех действующих опросов, созданных запрашивающим руководителем")
-    public Set<AssessmentProcessResponse> getAssessmentProcesses(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return creatorAssessmentProcessService.getCreatedAssessmentProcesses(userDetails);
+    public Set<AssessmentProcessResponse> getAssessmentProcesses() {
+        return creatorAssessmentProcessService.getCreatedAssessmentProcesses();
     }
 
     @GetMapping("{id}/results")
     @PreAuthorize("hasRole('MASTER')")
     @Operation(summary = "Получение результатов опроса по id, доступно только руководителю, создавшему этот опрос")
     public Set<ResultResponse> getResultsByAssessmentProcessId(
-            @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return creatorAssessmentProcessService.getResultsByAssessmentProcessId(id, userDetails);
+            @PathVariable Long id) {
+        return creatorAssessmentProcessService.getResultsByAssessmentProcessId(id);
     }
 
     @PostMapping("{id}/results")
@@ -60,16 +55,15 @@ public class AssessmentProcessController {
     @Operation(summary = "Подтверждение результатов опроса по id, доступно только руководителю, создавшему этот опрос")
     public Set<AssessmentProcessResponse> approveResultsByAssessmentProcessId(
             @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody SkillLevelsRequest request) {
-        return creatorAssessmentProcessService.approveResultsByAssessmentProcessId(id, userDetails, request);
+        return creatorAssessmentProcessService.approveResultsByAssessmentProcessId(id, request);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'MASTER')")
     @Operation(summary = "Получение всех назначенных запрашивающему пользователю опросов")
-    public Set<AssessmentProcessResponse> getAssignedAssessmentProcesses(@AuthenticationPrincipal UserDetails userDetails) {
-        return assessorAssessmentProcessService.getAssignedAssessmentProcesses(userDetails);
+    public Set<AssessmentProcessResponse> getAssignedAssessmentProcesses() {
+        return assessorAssessmentProcessService.getAssignedAssessmentProcesses();
     }
 
     @GetMapping("{id}")
@@ -77,10 +71,9 @@ public class AssessmentProcessController {
     @Operation(summary = "Получение вопросов по id опроса, доступно только специалисту, которому назначен данный опрос")
     public Page<QuestionResponse> getQuestionsByAssessmentProcessId(
             @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        return assessorAssessmentProcessService.getQuestionsByAssessmentProcessId(id, userDetails, page, size);
+        return assessorAssessmentProcessService.getQuestionsByAssessmentProcessId(id, page, size);
     }
 
     @PostMapping("{id}")
@@ -88,8 +81,7 @@ public class AssessmentProcessController {
     @Operation(summary = "Сохранение ответов по id опроса, доступно только специалисту, которому назначен данный опрос")
     public Set<AssessmentProcessResponse> saveRatesByAssessmentProcessId(
             @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody AssessorSkillRatesRequest request) {
-        return assessorAssessmentProcessService.saveRatesByAssessmentProcessId(id, userDetails, request);
+        return assessorAssessmentProcessService.saveRatesByAssessmentProcessId(id, request);
     }
 }
