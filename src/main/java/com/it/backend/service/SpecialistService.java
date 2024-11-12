@@ -4,6 +4,7 @@ import com.it.backend.dto.request.ProfileRequest;
 import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.entity.Specialist;
 import com.it.backend.entity.User;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.PositionMapper;
 import com.it.backend.mapper.SpecialistMapper;
@@ -62,8 +63,7 @@ public class SpecialistService {
     public Specialist saveSpecialist(Specialist specialist) {
         if (!specialistRepository.existsByUser(specialist.getUser()))
             return specialistRepository.save(specialist);
-        throw new RuntimeException("Профиль уже существует");
-        //TODO обработка ошибок
+        throw new DuplicateEntityException("specialist.already.exists", specialist.getId());
     }
 
     public Specialist updateSpecialist(Specialist specialist) {
