@@ -12,6 +12,6 @@ public record ProfileResponse(
         String city,
         String sex,
         PositionResponse positionResponse,
-        Set<SkillResponse> skillResponses
+        Set<SkillLevelResponse> skillLevelResponses
 ) {
 }

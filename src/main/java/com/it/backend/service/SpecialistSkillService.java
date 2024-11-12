@@ -1,8 +1,9 @@
 package com.it.backend.service;
 
-import com.it.backend.entity.Skill;
-import com.it.backend.entity.Specialist;
-import com.it.backend.entity.SpecialistSkill;
+import com.it.backend.dto.response.SkillLevelResponse;
+import com.it.backend.entity.*;
+import com.it.backend.mapper.SkillMapper;
+import com.it.backend.repository.SkillLevelRepository;
 import com.it.backend.repository.SpecialistSkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,10 @@ public class SpecialistSkillService {
 
     private final SkillService skillService;
     private final LevelService skillLevelService;
-    private final PositionSkillService positionSkillService;
     private final SpecialistSkillRepository specialistSkillRepository;
+    private final PositionService positionService;
+    private final SkillMapper skillMapper;
+    private final SkillLevelRepository skillLevelRepository;
 
     private SpecialistSkill createSpecialistSkill(Specialist specialist, Skill skill) {
         SpecialistSkill specialistSkill = new SpecialistSkill();
@@ -41,13 +44,25 @@ public class SpecialistSkillService {
         });
         Optional.ofNullable(specialist.getPosition())
                 .ifPresent((position -> {
-                    var skillSet = positionSkillService.findSkillsByPosition(position);
+                    var skillSet = positionService.findSkillsByPosition(position);
                     for (Skill skill : skillSet) {
                         var specialistSkill = createSpecialistSkill(specialist, skill);
                         specialistSkills.add(specialistSkill);
                     }
                 }));
         return specialistSkills;
+    }
+
+    public Set<SkillLevelResponse> getSkillLevelsBySpecialist(Specialist specialist){
+        Set<SkillLevelResponse> skillLevelResponses = new HashSet<>();
+        for (SpecialistSkill specialistSkillsLevel : specialist.getSpecialistSkillsLevels()) {
+            var skill = specialistSkillsLevel.getSkill();
+            var level = specialistSkillsLevel.getLevel();
+            var skillLevel = skillLevelRepository.findBySkillAndLevel(skill, level);
+            SkillLevelResponse skillLevelResponse = skillMapper.toSkillLevelResponse(skillLevel);
+            skillLevelResponses.add(skillLevelResponse);
+        }
+        return skillLevelResponses;
     }
 
     public Set<Skill> getSkillsBySpecialist(Specialist specialist) {

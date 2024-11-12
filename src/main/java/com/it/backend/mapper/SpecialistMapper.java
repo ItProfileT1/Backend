@@ -3,6 +3,7 @@ package com.it.backend.mapper;
 import com.it.backend.dto.request.ProfileRequest;
 import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.dto.response.PositionResponse;
+import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.Specialist;
 import org.mapstruct.BeanMapping;
@@ -26,5 +27,5 @@ public interface SpecialistMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(source = "specialist.name", target = "name")
     @Mapping(source = "specialist.id", target = "id")
-    ProfileResponse toProfileResponse(Specialist specialist, PositionResponse positionResponse, Set<SkillResponse> skillResponses);
+    ProfileResponse toProfileResponse(Specialist specialist, PositionResponse positionResponse, Set<SkillLevelResponse> skillLevelResponses);
 }

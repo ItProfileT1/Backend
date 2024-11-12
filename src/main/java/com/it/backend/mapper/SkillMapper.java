@@ -1,10 +1,14 @@
 package com.it.backend.mapper;
 
 import com.it.backend.dto.request.SkillRequest;
+import com.it.backend.dto.response.LevelResponse;
+import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.*;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Set;
 
@@ -24,7 +28,15 @@ public interface SkillMapper {
 
     Set<Skill> toSkills(Iterable<SpecialistSkill> specialistSkills);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     SkillResponse toSkillResponse(Skill skill);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Set<SkillResponse> toSkillResponses(Iterable<Skill> skills);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    LevelResponse toLevelResponse(Level level);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    SkillLevelResponse toSkillLevelResponse(SkillLevel skillLevel);
 }

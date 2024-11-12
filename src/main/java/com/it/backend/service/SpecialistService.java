@@ -51,10 +51,9 @@ public class SpecialistService {
     }
 
     private ProfileResponse getProfileBySpecialist(Specialist specialist) {
-        var positionResponse = positionMapper.toPositionResponse(specialist.getPosition());
-        var skills = specialistSkillService.getSkillsBySpecialist(specialist);
-        var skillResponses = skillMapper.toSkillResponses(skills);
-        return specialistMapper.toProfileResponse(specialist, positionResponse, skillResponses);
+        var positionResponse = positionMapper.toPositionResponse(specialist.getPosition(), null);
+        var skillLevelResponses = specialistSkillService.getSkillLevelsBySpecialist(specialist);
+        return specialistMapper.toProfileResponse(specialist, positionResponse, skillLevelResponses);
     }
 
     public Specialist saveSpecialist(Specialist specialist){
