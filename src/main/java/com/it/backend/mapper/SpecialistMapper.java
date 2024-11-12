@@ -1,10 +1,9 @@
 package com.it.backend.mapper;
 
 import com.it.backend.dto.request.ProfileRequest;
-import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.dto.response.PositionResponse;
+import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.dto.response.SkillLevelResponse;
-import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.Specialist;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

@@ -9,6 +9,8 @@ import java.util.Set;
 
 public interface AssessmentProcessAssessorStatusRepository extends JpaRepository<AssessmentProcessAssessorStatus, Long> {
     AssessmentProcessAssessorStatus findByAssessmentProcessAndAssessor(AssessmentProcess assessmentProcess, User assessor);
+
     Set<AssessmentProcessAssessorStatus> findByAssessmentProcess(AssessmentProcess assessmentProcess);
+
     void removeByAssessmentProcess(AssessmentProcess assessmentProcess);
 }

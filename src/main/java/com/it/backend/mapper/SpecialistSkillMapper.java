@@ -4,7 +4,6 @@ import com.it.backend.dto.response.ResultResponse;
 import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.entity.*;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -22,7 +21,7 @@ public interface SpecialistSkillMapper {
 
     @Mapping(source = "specialistSkill.skill", target = "skill")
     @Mapping(source = "specialistSkill.level", target = "level")
-    ResultResponse toResultResponse(SpecialistSkill specialistSkill, SkillLevel skillLevel);
+    ResultResponse toResultResponse(SpecialistSkill specialistSkill, SkillLevel skillLevel, Set<String> comments);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

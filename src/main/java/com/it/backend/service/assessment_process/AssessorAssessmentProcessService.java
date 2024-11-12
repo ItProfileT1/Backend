@@ -69,9 +69,7 @@ public class AssessorAssessmentProcessService {
     }
 
     @Transactional
-    public Set<AssessmentProcessResponse> saveRatesByAssessmentProcessId(
-            Long id, AssessorSkillRatesRequest request
-    ) {
+    public Set<AssessmentProcessResponse> saveRatesByAssessmentProcessId(Long id, AssessorSkillRatesRequest request) {
         User user = userService.getCurrentUser();
         AssessmentProcess assessmentProcess = assessmentProcessRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
@@ -88,7 +86,7 @@ public class AssessorAssessmentProcessService {
             assessmentProcessValidator.validateSkillRate(rate, skill);
 
             AssessorSkillRate assessorSkillRate = assessorSkillRateMapper.toAssessorSkillRate(
-                    assessmentProcess, user, skill, rate);
+                    assessmentProcess, user, skill, rate, subRequest.comment());
             assessorSkillRates.add(assessorSkillRate);
         }
         assessorSkillRateRepository.saveAll(assessorSkillRates);

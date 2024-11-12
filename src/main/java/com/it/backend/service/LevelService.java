@@ -11,7 +11,7 @@ public class LevelService {
 
     private final LevelRepository levelRepository;
 
-    public Level findByNumericValue(Integer value){
+    public Level findByNumericValue(Integer value) {
         return levelRepository.findByNumericValue(value);
     }
 }

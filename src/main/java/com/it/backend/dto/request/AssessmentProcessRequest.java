@@ -2,7 +2,9 @@ package com.it.backend.dto.request;
 
 import com.it.backend.utils.offsetdatetime.FutureOffsetDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;

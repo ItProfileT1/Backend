@@ -1,7 +1,10 @@
 package com.it.backend.service.assessment_process;
 
 import com.it.backend.entity.*;
-import com.it.backend.repository.*;
+import com.it.backend.repository.AssessmentProcessAssessorStatusRepository;
+import com.it.backend.repository.AssessmentProcessRepository;
+import com.it.backend.repository.AssessorSkillRateRepository;
+import com.it.backend.repository.SpecialistSkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

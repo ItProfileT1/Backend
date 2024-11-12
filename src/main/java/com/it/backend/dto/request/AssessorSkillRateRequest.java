@@ -1,7 +1,8 @@
 package com.it.backend.dto.request;
 
 public record AssessorSkillRateRequest(
-       Long skillId,
-       Long rateId
+        Long skillId,
+        Long rateId,
+        String comment
 ) {
 }

@@ -32,15 +32,15 @@ public class ApiTokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     )
-    throws ServletException, IOException {
+            throws ServletException, IOException {
 
         var token = request.getHeader(HEADER_NAME);
 
-        if (token == null){
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (SecurityContextHolder.getContext().getAuthentication() == null && apiTokenService.isTokenValid(token)){
+        if (SecurityContextHolder.getContext().getAuthentication() == null && apiTokenService.isTokenValid(token)) {
             UserDetails userDetails = apiClientService
                     .userDetailsService()
                     .loadUserByUsername(token);

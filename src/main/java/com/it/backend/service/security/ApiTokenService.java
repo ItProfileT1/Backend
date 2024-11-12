@@ -18,11 +18,11 @@ public class ApiTokenService {
 
     private final ApiClientService apiClientService;
 
-    public boolean isTokenValid(String token){
+    public boolean isTokenValid(String token) {
         return apiClientService.existsByToken(token);
     }
 
-    public String generateToken(){
+    public String generateToken() {
         byte[] randomBytes = new byte[48]; // 48 байт -> 64 символа в Base64
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);

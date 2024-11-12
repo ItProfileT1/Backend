@@ -46,7 +46,7 @@ public class PositionService {
     public Set<Skill> findSkillsByPosition(Position position) {
         Set<Skill> skills = new HashSet<>();
         var positionSkills = findAllPositionSkillsByPosition(position);
-        if (positionSkills == null){
+        if (positionSkills == null) {
             return null;
         }
         for (PositionSkill positionSkill : positionSkills) {
@@ -73,7 +73,7 @@ public class PositionService {
                 skillMapper.toSkillResponses(findSkillsByPosition(position)));
     }
 
-    public Position findById(Long id){
+    public Position findById(Long id) {
         return positionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("position.not.found", id));
     }
@@ -100,7 +100,7 @@ public class PositionService {
         positionRepository.delete(findById(id));
     }
 
-    public Set<PositionSkill> findAllPositionSkillsByPosition(Position position){
+    public Set<PositionSkill> findAllPositionSkillsByPosition(Position position) {
         return position.getPositionSkills();
     }
 

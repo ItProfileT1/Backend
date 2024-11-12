@@ -9,6 +9,6 @@ import lombok.Getter;
 public class EntityNotFoundException extends ApplicationNotFoundException {
 
     public EntityNotFoundException(String message, Long id) {
-        super(message, new Object[] { id });
+        super(message, new Object[]{id});
     }
 }

@@ -53,7 +53,7 @@ public class SpecialistSkillService {
         return specialistSkills;
     }
 
-    public Set<SkillLevelResponse> getSkillLevelsBySpecialist(Specialist specialist){
+    public Set<SkillLevelResponse> getSkillLevelsBySpecialist(Specialist specialist) {
         Set<SkillLevelResponse> skillLevelResponses = new HashSet<>();
         for (SpecialistSkill specialistSkillsLevel : specialist.getSpecialistSkillsLevels()) {
             SkillLevelResponse skillLevelResponse = skillMapper.toSkillLevelResponse(specialistSkillsLevel);

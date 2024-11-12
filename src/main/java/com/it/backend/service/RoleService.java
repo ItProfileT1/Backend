@@ -17,8 +17,8 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
-    public Role findById(Long id){
-        return roleRepository.findById(id).orElseThrow(()->new EntityNotFoundException("role.not.found", id));
+    public Role findById(Long id) {
+        return roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("role.not.found", id));
     }
 
     public Set<RoleResponse> findAll() {
@@ -27,7 +27,7 @@ public class RoleService {
         return RoleMapper.INSTANCE.toRoleResponses(roleSet);
     }
 
-    public RoleResponse roleToRoleResponse(Role role){
+    public RoleResponse roleToRoleResponse(Role role) {
         return RoleMapper.INSTANCE.toRoleResponse(role);
     }
 }
