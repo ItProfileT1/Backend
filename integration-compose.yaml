@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-  backend:
+  it-profile-backend:
     image: abrodep/t1-it-profile-backend:latest
     ports:
       - '8080:8080'
@@ -15,11 +15,11 @@ services:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
-  react-app:
+  it-profile-frontend:
     image: abrodep/t1-it-profile-frontend:latest
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     depends_on:
-      - backend
+      - it-profile-backend
