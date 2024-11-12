@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t abrodep/t1-it-profile:latest .
+          docker build --no-cache -t abrodep/t1-it-profile:latest .
 
       - name: Push Docker image to Docker Hub
         run: |
