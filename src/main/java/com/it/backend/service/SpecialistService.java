@@ -42,6 +42,11 @@ public class SpecialistService {
         //TODO specialistSkillsLevels поменять на specialistSkills
     }
 
+    public Specialist findById(Long id) {
+        return specialistRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("specialist.not.found", id));
+    }
+
     public ProfileResponse getProfileByUser(User user) {
         var specialist = specialistRepository.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException("specialist.not.found", user.getId()));
@@ -81,9 +86,7 @@ public class SpecialistService {
         return profileResponses;
     }
 
-    public ProfileResponse findById(Long id) {
-        var specialist = specialistRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(("specialist.not.found"), id));
-        return getProfileBySpecialist(specialist);
+    public ProfileResponse getProfileById(Long id) {
+        return getProfileBySpecialist(findById(id));
     }
 }
