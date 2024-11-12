@@ -11,6 +11,8 @@ import com.it.backend.mapper.AssessorSkillRateMapper;
 import com.it.backend.mapper.QuestionMapper;
 import com.it.backend.mapper.SkillMapper;
 import com.it.backend.repository.*;
+import com.it.backend.service.RateService;
+import com.it.backend.service.SkillService;
 import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,11 +31,12 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AssessorAssessmentProcessService {
+    private final AssessmentProcessService assessmentProcessService;
+    private final SkillService skillService;
+    private final RateService rateService;
     private final SpecialistSkillRepository specialistSkillRepository;
     private final AssessmentProcessRepository assessmentProcessRepository;
     private final AssessorSkillRateRepository assessorSkillRateRepository;
-    private final SkillRepository skillRepository;
-    private final RateRepository rateRepository;
     private final AssessmentProcessAssessorStatusRepository assessmentProcessAssessorStatusRepository;
     private final AssessmentProcessValidator assessmentProcessValidator;
     private final SkillMapper skillMapper;
@@ -50,8 +53,7 @@ public class AssessorAssessmentProcessService {
 
     public Page<QuestionResponse> getQuestionsByAssessmentProcessId(Long id, int page, int size) {
         User user = userService.getCurrentUser();
-        AssessmentProcess assessmentProcess = assessmentProcessRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
+        AssessmentProcess assessmentProcess = assessmentProcessService.findById(id);
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
 
         Pageable pageable = PageRequest.of(page, size);
@@ -71,18 +73,15 @@ public class AssessorAssessmentProcessService {
     @Transactional
     public Set<AssessmentProcessResponse> saveRatesByAssessmentProcessId(Long id, AssessorSkillRatesRequest request) {
         User user = userService.getCurrentUser();
-        AssessmentProcess assessmentProcess = assessmentProcessRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("assessment_process.not.found", id));
+        AssessmentProcess assessmentProcess = assessmentProcessService.findById(id);
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
 
         Set<AssessorSkillRate> assessorSkillRates = new HashSet<>();
         for (AssessorSkillRateRequest subRequest : request.assessorSkillRates()) {
-            Skill skill = skillRepository.findById(subRequest.skillId())
-                    .orElseThrow(() -> new EntityNotFoundException("skill.not.found", subRequest.skillId()));
+            Skill skill = skillService.findById(subRequest.skillId());
             assessmentProcessValidator.validateAssessmentProcessSkill(skill, assessmentProcess);
 
-            Rate rate = rateRepository.findById(subRequest.rateId())
-                    .orElseThrow(() -> new EntityNotFoundException("rate.not.found", subRequest.rateId()));
+            Rate rate = rateService.findById(subRequest.rateId());
             assessmentProcessValidator.validateSkillRate(rate, skill);
 
             AssessorSkillRate assessorSkillRate = assessorSkillRateMapper.toAssessorSkillRate(

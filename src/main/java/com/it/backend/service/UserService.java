@@ -1,6 +1,7 @@
 package com.it.backend.service;
 
 import com.it.backend.entity.User;
+import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,10 @@ public class UserService {
             throw new RuntimeException(String.format("Пользователь %s уже существует", user.getUsername()));
         }
         return save(user);
+    }
+
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("user.not.found", id));
     }
 
     public User getByUsername(String username) {
