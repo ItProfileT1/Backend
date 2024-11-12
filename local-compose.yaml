@@ -15,3 +15,7 @@ services:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+    deploy:
+      update_config:
+        order: start-first
+
