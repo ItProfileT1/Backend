@@ -1,5 +1,6 @@
 package com.it.backend.service;
 
+import com.it.backend.dto.request.TokenGenerationRequest;
 import com.it.backend.entity.ApiClient;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.repository.ApiClientRepository;
@@ -14,6 +15,7 @@ public class ApiClientService {
 
     private final ApiClientRepository apiClientRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IntegrationRoleService integrationRoleService;
 
     public Iterable<ApiClient> findAll(){
         return apiClientRepository.findAll();
@@ -41,4 +43,15 @@ public class ApiClientService {
         return this::getByToken;
     }
 
+    public void create(String token, TokenGenerationRequest request) {
+        ApiClient apiClient = ApiClient.builder()
+                .token(passwordEncoder.encode(token))
+                .integrationRole(integrationRoleService.findById(request.integrationRoleId()))
+                .build();
+        if (existsByToken(token)){
+            throw new RuntimeException("Already exists");
+            //TODO ошибка Уже существует
+        }
+        apiClientRepository.save(apiClient);
+    }
 }

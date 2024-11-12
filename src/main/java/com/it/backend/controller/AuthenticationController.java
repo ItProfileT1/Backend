@@ -2,8 +2,10 @@ package com.it.backend.controller;
 
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
+import com.it.backend.dto.request.TokenGenerationRequest;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.response.RoleResponse;
+import com.it.backend.dto.response.TokenAuthenticationResponse;
 import com.it.backend.dto.response.UserResponse;
 import com.it.backend.service.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,6 +53,13 @@ public class AuthenticationController {
             @RequestBody @Validated SignInRequest request) {
         return authenticationService.signIn(request);
         //TODO сделать обработку ошибок (неверный юзернейм или пароль)
+    }
+
+    @PostMapping("integration/sign-up")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Генерация токена для интеграции, доступно только администратору")
+    public TokenAuthenticationResponse generateToken(@RequestBody TokenGenerationRequest tokenGenerationRequest){
+        return authenticationService.generateIntegrationToken(tokenGenerationRequest);
     }
 
     @GetMapping("roles")

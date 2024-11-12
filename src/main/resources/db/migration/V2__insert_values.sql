@@ -1,13 +1,15 @@
 set search_path to it_profile;
 
+insert into integration_roles(name)
+values ('ROLE_P2P');
+
+insert into api_clients(token, integration_role_id)
+values ('$2a$10$FE.QkmD5roR024XbcZyRXO4odh4MqYj/Gdvft4FM3Nv16/Lz5/sAa', 1);
+
 insert into roles (name)
 values ('ROLE_ADMIN'),
        ('ROLE_USER'),
-       ('ROLE_MASTER'),
-       ('ROLE_P2P');
-
-insert into api_clients(token, role_id)
-values ('$2a$10$FE.QkmD5roR024XbcZyRXO4odh4MqYj/Gdvft4FM3Nv16/Lz5/sAa', 4);
+       ('ROLE_MASTER');
 
 insert into users(username, password, role_id)
 values ('admin', '$2a$10$olLZfxwgaD1N9e4GIDoBIe6tQgu80Sphyg.kqSzum3VISvMOhwlxS', '1'),

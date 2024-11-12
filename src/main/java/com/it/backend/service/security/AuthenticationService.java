@@ -1,12 +1,15 @@
 package com.it.backend.service.security;
 
+import com.it.backend.dto.request.TokenGenerationRequest;
 import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.request.SignInRequest;
 import com.it.backend.dto.request.SignUpRequest;
 import com.it.backend.dto.response.RoleResponse;
+import com.it.backend.dto.response.TokenAuthenticationResponse;
 import com.it.backend.dto.response.UserResponse;
 import com.it.backend.entity.User;
 import com.it.backend.mapper.UserMapper;
+import com.it.backend.service.ApiClientService;
 import com.it.backend.service.RoleService;
 import com.it.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RoleService roleService;
+    private final ApiClientService apiClientService;
+    private final ApiTokenService apiTokenService;
 
     public UserResponse signUp(SignUpRequest request) {
         var user = User.builder()
@@ -54,4 +59,11 @@ public class AuthenticationService {
     public Set<RoleResponse> findRoles() {
         return roleService.findAll();
     }
+
+    public TokenAuthenticationResponse generateIntegrationToken(TokenGenerationRequest request) {
+        var token = apiTokenService.generateToken();
+        apiClientService.create(token, request);
+        return new TokenAuthenticationResponse(token);
+    }
+
 }
