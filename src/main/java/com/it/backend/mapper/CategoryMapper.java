@@ -5,10 +5,8 @@ import com.it.backend.dto.request.CategoryRequest;
 import com.it.backend.dto.response.CategoryResponse;
 import com.it.backend.entity.Category;
 import com.it.backend.entity.Type;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
@@ -17,12 +15,14 @@ import java.util.Set;
 public interface CategoryMapper {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
+    @Mapping(target = "typeResponse", source = "type")
     CategoryResponse toCategoryResponse(Category category);
 
+    @Mapping(target = "typeResponse", source = "type")
     Set<CategoryResponse> toCategoryResponses(Iterable<Category> categories);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "skills", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", source = "categoryRequest.name")
     Category toCategory(CategoryRequest categoryRequest, Type type);
 }

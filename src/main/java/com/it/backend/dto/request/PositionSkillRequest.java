@@ -1,4 +1,4 @@
 package com.it.backend.dto.request;
 
-public record PositionSkillRequest(Long skillId, Long minLevelId) {
+public record PositionSkillRequest(Long skillId) {
 }

@@ -1,11 +1,8 @@
 package com.it.backend.controller;
 
 import com.it.backend.dto.request.PositionRequest;
-import com.it.backend.dto.request.PositionSkillsRequest;
 import com.it.backend.dto.response.PositionResponse;
-import com.it.backend.dto.response.PositionSkillResponse;
 import com.it.backend.service.PositionService;
-import com.it.backend.service.PositionSkillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,6 @@ import java.util.Set;
 public class PositionController {
 
     private final PositionService positionService;
-    private final PositionSkillService positionSkillService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -60,11 +56,10 @@ public class PositionController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("{id}/skills")
+    @PostMapping("{positionId}/skills")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Добавление навыков к должности по айди, доступно только администратору")
-    public Set<PositionSkillResponse> addSkills(@PathVariable Long id, @RequestBody PositionSkillsRequest request) {
-        //TODO PositionSkillsRequest переименовать в SkillsRequest тк несет в себе список спиллов
-        return positionSkillService.addSkills(id, request);
+    public PositionResponse attachSkills(@PathVariable Long positionId, @RequestBody Set<Long> skillsIds) {
+        return positionService.attachSkills(positionId, skillsIds);
     }
 }
