@@ -41,6 +41,7 @@ services:
     depends_on:
       - db
       - kafka
+      - redis
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
@@ -59,3 +60,14 @@ services:
         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
         KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+  redis:
+    container_name: redis
+    image: redis:alpine
+    command: [ "redis-server", "--save", "", "--appendonly", "no", "--requirepass", "redis" ]
+    restart: always
+    volumes:
+      - redis-data:/data
+    expose:
+      - 6379
+volumes:
+  redis-data:
