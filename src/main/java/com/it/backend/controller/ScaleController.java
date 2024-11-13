@@ -4,6 +4,7 @@ import com.it.backend.dto.request.ScaleRequest;
 import com.it.backend.dto.response.ScaleResponse;
 import com.it.backend.service.ScaleService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/scales")
+@Tag(name = "Шкалы оценивания навыков")
 public class ScaleController {
 
     private final ScaleService scaleService;
@@ -26,15 +28,15 @@ public class ScaleController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @Operation(summary = "Получение шкалы оценивания по id, доступно только администратору")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение шкалы оценивания по id, доступно только администратору и специалисту")
     public ScaleResponse findPositionById(@PathVariable Long id) {
         return scaleService.findScaleById(id);
     }
 
     @GetMapping()
-    @Operation(summary = "Получение всех шкал оценивания, доступно только администратору")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Получение всех шкал оценивания, доступно только администратору и специалисту")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Set<ScaleResponse> findAllScales() {
         return scaleService.findAllScales();
     }

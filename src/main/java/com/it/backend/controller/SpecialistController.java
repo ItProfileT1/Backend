@@ -36,14 +36,14 @@ public class SpecialistController {
 
     @GetMapping
     @Operation(summary = "Получение специалистов с определенной должностью, доступно только администратору и p2p сервису")
-    @PreAuthorize("hasAnyRole('P2P', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('P2P', 'ADMIN', 'MASTER')")
     public Set<ProfileResponse> findAllProfilesByPosition(@RequestParam(required = false) String position) {
         return specialistService.findByPosition(position);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "Получение специалиста по айди, доступно только администратору и p2p сервису")
-    @PreAuthorize("hasAnyRole('P2P', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('P2P', 'ADMIN', 'MASTER')")
     public ProfileResponse findProfileByPosition(@PathVariable Long id) {
         return specialistService.getProfileById(id);
     }
