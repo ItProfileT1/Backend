@@ -10,7 +10,8 @@ services:
       POSTGRES_PASSWORD: postgres
   it-profile-backend:
     container_name: it-profile-backend
-    image: abrodep/t1-it-profile-backend:latest
+    image: backend
+    build: .
     ports:
       - '8080:8080'
     depends_on:
