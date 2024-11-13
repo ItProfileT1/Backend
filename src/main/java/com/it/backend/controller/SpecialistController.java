@@ -3,6 +3,7 @@ package com.it.backend.controller;
 import com.it.backend.dto.request.ProfileRequest;
 import com.it.backend.dto.response.ProfileResponse;
 import com.it.backend.service.SpecialistService;
+import com.it.backend.service.TechRadarService;
 import com.it.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,12 +20,15 @@ import java.util.Set;
 public class SpecialistController {
     private final SpecialistService specialistService;
     private final UserService userService;
+    private final TechRadarService techRadarService;
 
     @PostMapping("profile")
     @Operation(summary = "Создание профиля, доступно только специалисту")
     @PreAuthorize("hasRole('USER')")
     public ProfileResponse createProfile(@RequestBody ProfileRequest request) {
-        return specialistService.createProfile(request, userService.getCurrentUser());
+        var response = specialistService.createProfile(request, userService.getCurrentUser());
+        techRadarService.sendRequests();
+        return response;
     }
 
     @GetMapping("profile")

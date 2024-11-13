@@ -6,6 +6,7 @@ import com.it.backend.dto.request.SkillLevelsRequest;
 import com.it.backend.dto.response.AssessmentProcessResponse;
 import com.it.backend.dto.response.QuestionResponse;
 import com.it.backend.dto.response.ResultResponse;
+import com.it.backend.service.TechRadarService;
 import com.it.backend.service.assessment_process.AssessorAssessmentProcessService;
 import com.it.backend.service.assessment_process.CreatorAssessmentProcessService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,7 @@ import java.util.Set;
 public class AssessmentProcessController {
     private final AssessorAssessmentProcessService assessorAssessmentProcessService;
     private final CreatorAssessmentProcessService creatorAssessmentProcessService;
+    private final TechRadarService techRadarService;
 
     @PostMapping
     @PreAuthorize("hasRole('MASTER')")
@@ -56,7 +58,9 @@ public class AssessmentProcessController {
     public Set<AssessmentProcessResponse> approveResultsByAssessmentProcessId(
             @PathVariable Long id,
             @RequestBody SkillLevelsRequest request) {
-        return creatorAssessmentProcessService.approveResultsByAssessmentProcessId(id, request);
+        var response = creatorAssessmentProcessService.approveResultsByAssessmentProcessId(id, request);
+        techRadarService.sendRequests();
+        return response;
     }
 
     @GetMapping

@@ -1,6 +1,8 @@
 spring:
   application:
     name: Backend
+  main:
+    allow-circular-references: true
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
     username: postgres
@@ -16,13 +18,10 @@ spring:
     show-sql: true
   kafka:
     producer:
-      bootstrap-servers: localhost:9902
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        enable_idempotence: true
+      bootstrap-servers: localhost:9092
     consumer:
-      bootstrap-servers: localhost:9902
       group-id: technology
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

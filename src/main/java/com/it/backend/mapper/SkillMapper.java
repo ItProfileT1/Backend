@@ -1,6 +1,7 @@
 package com.it.backend.mapper;
 
 import com.it.backend.dto.request.SkillRequest;
+import com.it.backend.dto.request.SkillTechRadarRequest;
 import com.it.backend.dto.response.SkillLevelResponse;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.entity.*;
@@ -36,4 +37,9 @@ public interface SkillMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     SkillLevelResponse toSkillLevelResponse(SpecialistSkill specialistSkill);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "category", source = "skill.category.name")
+    @Mapping(target = "usageLevel", source = "usageLevel")
+    SkillTechRadarRequest toSkillTechRadarRequest(Skill skill, double usageLevel);
 }
