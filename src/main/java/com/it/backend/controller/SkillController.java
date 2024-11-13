@@ -4,6 +4,7 @@ import com.it.backend.dto.request.SkillRequest;
 import com.it.backend.dto.response.SkillResponse;
 import com.it.backend.mapper.SkillMapper;
 import com.it.backend.service.SkillService;
+import com.it.backend.service.TechRadarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class SkillController {
 
     private final SkillService skillService;
     private final SkillMapper skillMapper;
+    private final TechRadarService techRadarService;
 
     @GetMapping
     @Operation(summary = "Получение всех навыков, доступно только администратору и специалисту")
@@ -33,7 +35,9 @@ public class SkillController {
     @Operation(summary = "Создание нового навыка, доступно только администратору")
     @PreAuthorize("hasRole('ADMIN')")
     public SkillResponse createSkill(@RequestBody SkillRequest request) {
-        return skillService.create(request);
+        var skillResponse = skillService.create(request);
+        techRadarService.sendRequests();
+        return skillResponse;
     }
 
     @GetMapping("{id}")
