@@ -34,7 +34,6 @@ public class AuthenticationController {
     @Operation(summary = "Регистрация пользователя, доступно только администратору")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> signUpUser(@RequestBody @Validated SignUpRequest request) {
-        //TODO сделать обработку ошибок (пользователь с таким юзернеймом уже существует)
         var userResponse = authenticationService.signUp(request);
         return ResponseEntity.ok(userResponse);
     }

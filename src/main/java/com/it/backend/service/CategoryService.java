@@ -3,6 +3,7 @@ package com.it.backend.service;
 import com.it.backend.dto.request.CategoryRequest;
 import com.it.backend.dto.response.CategoryResponse;
 import com.it.backend.entity.Category;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.CategoryMapper;
 import com.it.backend.repository.CategoryRepository;
@@ -29,7 +30,7 @@ public class CategoryService {
 
     public Category create(CategoryRequest categoryRequest) {
         if (categoryRepository.existsByName(categoryRequest.name())) {
-            throw new RuntimeException(String.format("category with name %s already exists", categoryRequest.name()));
+            throw new DuplicateEntityException("scale.already.exists", categoryRequest.name());
         }
         Category category = categoryMapper.toCategory(categoryRequest, typeService.findById(categoryRequest.typeId()));
         return categoryRepository.save(category);

@@ -15,6 +15,7 @@ import java.util.Set;
 public interface SkillMapper {
 
     @Mapping(source = "skillRequest.name", target = "name")
+    @Mapping(target = "category", source = "category")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "skillSpecialistsLevels", ignore = true)
     @Mapping(target = "skillRates", ignore = true)

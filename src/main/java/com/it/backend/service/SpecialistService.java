@@ -40,7 +40,6 @@ public class SpecialistService {
         ));
         specialist = updateSpecialist(specialist);
         return getProfileBySpecialist(specialist);
-        //TODO specialistSkillsLevels поменять на specialistSkills
     }
 
     public Specialist findById(Long id) {

@@ -1,6 +1,7 @@
 package com.it.backend.service;
 
 import com.it.backend.entity.User;
+import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class UserService {
 
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException(String.format("Пользователь %s уже существует", user.getUsername()));
+            throw new DuplicateEntityException("scale.already.exists", user.getUsername());
         }
         return save(user);
     }
