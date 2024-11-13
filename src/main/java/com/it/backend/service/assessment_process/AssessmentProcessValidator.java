@@ -23,7 +23,7 @@ public class AssessmentProcessValidator {
     public void validateAssessmentProcessSkill(Skill skill, AssessmentProcess assessmentProcess) {
         if (!assessorSkillRateRepository.existsByAssessmentProcessAndSkill(assessmentProcess, skill)) {
             throw new AssessmentProcessInconsistencyException(
-                    "assessment_process.does.not.include.skill", assessmentProcess.getId(), skill.getId());
+                    "assessment_process.does.not.include.skill", skill.getId(), assessmentProcess.getId());
         }
     }
 
@@ -35,7 +35,7 @@ public class AssessmentProcessValidator {
     }
 
     public void checkCreatorAccessToAssessmentProcess(User user, AssessmentProcess assessmentProcess) {
-        if (user.equals(assessmentProcess.getCreator())) {
+        if (!user.equals(assessmentProcess.getCreator())) {
             throw new AssessmentProcessAccessException(
                     "user.has.no.access.to.assessment_process", user.getId(), assessmentProcess.getId());
         }
