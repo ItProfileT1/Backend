@@ -16,7 +16,7 @@ services:
       - kafka
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
-      SPRING_KAFKA_SERVER: kafka:9022
+      SPRING_KAFKA_SERVER: kafka:9092
   it-profile-frontend:
     image: abrodep/t1-it-profile-frontend:latest
     ports:
