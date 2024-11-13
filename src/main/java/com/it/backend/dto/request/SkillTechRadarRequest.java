@@ -1,6 +1,6 @@
 package com.it.backend.dto.request;
 
-public record SkillTechradarRequest(
+public record SkillTechRadarRequest(
         Long id,
         String name,
         String description,
