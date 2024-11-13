@@ -5,12 +5,14 @@ import com.it.backend.dto.request.AssessorSkillRatesRequest;
 import com.it.backend.dto.response.AssessmentProcessResponse;
 import com.it.backend.dto.response.QuestionResponse;
 import com.it.backend.entity.*;
-import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.AssessmentProcessMapper;
 import com.it.backend.mapper.AssessorSkillRateMapper;
 import com.it.backend.mapper.QuestionMapper;
 import com.it.backend.mapper.SkillMapper;
-import com.it.backend.repository.*;
+import com.it.backend.repository.AssessmentProcessAssessorStatusRepository;
+import com.it.backend.repository.AssessmentProcessRepository;
+import com.it.backend.repository.AssessorSkillRateRepository;
+import com.it.backend.repository.SpecialistSkillRepository;
 import com.it.backend.service.RateService;
 import com.it.backend.service.SkillService;
 import com.it.backend.service.UserService;
@@ -24,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +77,6 @@ public class AssessorAssessmentProcessService {
         AssessmentProcess assessmentProcess = assessmentProcessService.findById(id);
         assessmentProcessValidator.checkAssessorAccessToAssessmentProcess(user, assessmentProcess);
 
-        Set<AssessorSkillRate> assessorSkillRates = new HashSet<>();
         for (AssessorSkillRateRequest subRequest : request.assessorSkillRates()) {
             Skill skill = skillService.findById(subRequest.skillId());
             assessmentProcessValidator.validateAssessmentProcessSkill(skill, assessmentProcess);
@@ -84,11 +84,10 @@ public class AssessorAssessmentProcessService {
             Rate rate = rateService.findById(subRequest.rateId());
             assessmentProcessValidator.validateSkillRate(rate, skill);
 
-            AssessorSkillRate assessorSkillRate = assessorSkillRateMapper.toAssessorSkillRate(
-                    assessmentProcess, user, skill, rate, subRequest.comment());
-            assessorSkillRates.add(assessorSkillRate);
+            AssessorSkillRate assessorSkillRate = assessorSkillRateRepository.findByAssessorAndSkill(user, skill);
+            assessorSkillRateMapper.updateAssessorSkillRate(assessorSkillRate, rate, subRequest.comment());
+            System.out.println(assessorSkillRate.getRate().getId());
         }
-        assessorSkillRateRepository.saveAll(assessorSkillRates);
 
         AssessmentProcessAssessorStatus assessmentProcessAssessorStatus =
                 assessmentProcessAssessorStatusRepository.findByAssessmentProcessAndAssessor(assessmentProcess, user);

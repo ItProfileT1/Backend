@@ -67,7 +67,7 @@ public class CreatorAssessmentProcessService {
         for (Long assessorId : request.assessorsIds()) {
             User assessor = userService.getById(assessorId);
             AssessmentProcessAssessorStatus assessmentProcessAssessorStatus =
-                    assessmentProcessAssessorStatusMapper.toAssessmentProcessAssessorStatus(assessmentProcess, user, Status.AWAITING);
+                    assessmentProcessAssessorStatusMapper.toAssessmentProcessAssessorStatus(assessmentProcess, assessor, Status.AWAITING);
             assessmentProcessAssessorStatuses.add(assessmentProcessAssessorStatus);
             for (Skill skill : skillsForAssessment) {
                 assessorSkillRates.add(assessorSkillRateMapper.toAssessorSkillRate(assessmentProcess, assessor, skill));

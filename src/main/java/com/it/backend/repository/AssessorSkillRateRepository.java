@@ -14,6 +14,8 @@ public interface AssessorSkillRateRepository extends JpaRepository<AssessorSkill
 
     void removeByAssessmentProcess(AssessmentProcess assessmentProcess);
 
+    AssessorSkillRate findByAssessorAndSkill(User assessor, Skill skill);
+
     @Query(value = "SELECT asr FROM AssessorSkillRate asr " +
             "INNER JOIN Rate r ON asr.rate.id = r.id " +
             "INNER JOIN AssessmentProcessAssessorStatus s ON asr.assessmentProcess.id = s.assessmentProcess.id " +

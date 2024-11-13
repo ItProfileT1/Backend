@@ -1,10 +1,7 @@
 package com.it.backend.mapper;
 
 import com.it.backend.entity.*;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AssessorSkillRateMapper {
@@ -15,5 +12,7 @@ public interface AssessorSkillRateMapper {
     AssessorSkillRate toAssessorSkillRate(AssessmentProcess assessmentProcess, User assessor, Skill skill);
 
     @Mapping(target = "id", ignore = true)
-    AssessorSkillRate toAssessorSkillRate(AssessmentProcess assessmentProcess, User assessor, Skill skill, Rate rate, String comment);
+    @Mapping(source = "rate", target = "rate")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateAssessorSkillRate(@MappingTarget AssessorSkillRate assessorSkillRate, Rate rate, String comment);
 }
