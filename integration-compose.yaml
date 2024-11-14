@@ -12,8 +12,10 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - db
-      - kafka
+      db:
+        condition: service_started
+      kafka:
+        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_KAFKA_SERVER: kafka:29092
@@ -26,7 +28,8 @@ services:
       - NODE_ENV=development
       - REACT_APP_API_URL=10.4.56.98
     depends_on:
-      - it-profile-backend
+      it-profile-backend:
+        condition: service_started
   tech-radar-backend:
     container_name: tech-radar-backend
     image: shimady563/t1-debut-team5-backend:latest
@@ -42,7 +45,7 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       it-profile-backend:
-        condition: service_completed_successfully
+        condition: service_started
       db:
         condition: service_started
       redis:
