@@ -19,6 +19,11 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_KAFKA_SERVER: kafka:29092
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://10.4.56.98:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   it-profile-frontend:
     container_name: it-profile-frontend
     image: abrodep/t1-it-profile-frontend:latest
@@ -45,7 +50,7 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       it-profile-backend:
-        condition: service_started
+        condition: service_healthy
       db:
         condition: service_started
       redis:

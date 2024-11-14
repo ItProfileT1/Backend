@@ -22,7 +22,7 @@ public class TechRadarController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'MASTER')")
-    @Operation(summary = "Получение техрадара, доступно администратору и руководителю")
+    @Operation(summary = "Получение техрадара, доступно специалисту и руководителю")
     public Set<TechnologyPayloadResponse> getTechRadar(){
         return techRadarService.getTechRadar();
     }
