@@ -46,6 +46,8 @@ public class SpecialistSkillService {
                 .ifPresent((position -> {
                     var skillSet = positionService.findSkillsByPosition(position);
                     for (Skill skill : skillSet) {
+                        if (skillsIds.isPresent() && skillsIds.get().contains(skill.getId()))
+                            continue;
                         var specialistSkill = createSpecialistSkill(specialist, skill);
                         specialistSkills.add(specialistSkill);
                     }
