@@ -23,5 +23,6 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - URL=10.4.56.98
     depends_on:
       - it-profile-backend

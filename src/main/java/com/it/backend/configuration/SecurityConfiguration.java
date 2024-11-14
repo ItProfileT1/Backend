@@ -40,7 +40,11 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:*", "http://it-profile-frontend:*", "http://10.4.56.98:*"));
+                    corsConfiguration.setAllowedOrigins(List.of(
+                            "http://localhost",
+                            "http://10.4.56.98",
+                            "http://10.4.56.94")
+                    );
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
                     return corsConfiguration;
