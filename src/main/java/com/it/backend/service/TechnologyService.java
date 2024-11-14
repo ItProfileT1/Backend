@@ -17,6 +17,7 @@ public class TechnologyService {
 
     public void update(String key, TechnologyPayloadResponse message){
         technologyMemory.putIfAbsent(key, message);
+        technologyMemory.replace(key, message);
     }
 
     public Set<TechnologyPayloadResponse> getTechnologies(){
