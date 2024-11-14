@@ -4,7 +4,7 @@ insert into integration_roles(name)
 values ('ROLE_P2P');
 
 insert into api_clients(token, integration_role_id)
-values ('$2a$10$FE.QkmD5roR024XbcZyRXO4odh4MqYj/Gdvft4FM3Nv16/Lz5/sAa', 1);
+values ('$2a$10$bZJsgtDil4XIabRJgNWejuJa9j1vzq126T9TBi8/2KZSNVJIaP1S2', 1);
 
 insert into roles (name)
 values ('ROLE_ADMIN'),
