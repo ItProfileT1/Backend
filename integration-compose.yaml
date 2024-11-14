@@ -24,11 +24,11 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - URL=10.4.56.98
+      - REACT_APP_API_URL=10.4.56.98
     depends_on:
       - it-profile-backend
-  tech_radar:
-    container_name: tech_radar
+  tech-radar-backend:
+    container_name: tech-radar-backend
     image: shimady563/t1-debut-team5-backend:latest
     ports:
       - "8090:8080"
@@ -46,6 +46,14 @@ services:
       db:
         condition: service_started
       redis:
+        condition: service_started
+  tech-radar-frontend:
+    container_name: tech-radar-frontend
+    image: shimady563/t1-debut-team5-frontend:latest
+    ports:
+      - "5173:5173"
+    depends_on:
+      tech-radar-backend:
         condition: service_started
   zookeeper:
     container_name: zookeeper
