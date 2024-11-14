@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOrigins(List.of(
-                            "http://localhost",
+                            "http://localhost:3000",
                             "http://10.4.56.98",
                             "http://10.4.56.94")
                     );
