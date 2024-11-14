@@ -1,0 +1,22 @@
+services:
+  tech-radar-backend:
+    container_name: tech-radar-backend
+    image: shimady563/t1-debut-team5-backend:latest
+    ports:
+      - "8090:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_PASSWORD=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+  tech-radar-frontend:
+    container_name: tech-radar-frontend
+    image: shimady563/t1-debut-team5-frontend:latest
+    ports:
+      - "5173:5173"
+    depends_on:
+      tech-radar-backend:
+        condition: service_started
