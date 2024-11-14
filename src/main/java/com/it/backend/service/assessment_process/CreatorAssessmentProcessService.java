@@ -65,7 +65,7 @@ public class CreatorAssessmentProcessService {
         Set<AssessmentProcessAssessorStatus> assessmentProcessAssessorStatuses = new HashSet<>();
 
         for (Long assessorId : request.assessorsIds()) {
-            User assessor = userService.getById(assessorId);
+            User assessor = specialistService.findById(assessorId).getUser();
             AssessmentProcessAssessorStatus assessmentProcessAssessorStatus =
                     assessmentProcessAssessorStatusMapper.toAssessmentProcessAssessorStatus(assessmentProcess, assessor, Status.AWAITING);
             assessmentProcessAssessorStatuses.add(assessmentProcessAssessorStatus);
