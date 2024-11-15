@@ -3,7 +3,10 @@ package com.it.backend.service;
 import com.it.backend.dto.request.SkillRequest;
 import com.it.backend.dto.request.SkillTechRadarRequest;
 import com.it.backend.dto.response.SkillResponse;
+import com.it.backend.entity.Level;
 import com.it.backend.entity.Skill;
+import com.it.backend.entity.Specialist;
+import com.it.backend.entity.SpecialistSkill;
 import com.it.backend.exception.entity.DuplicateEntityException;
 import com.it.backend.exception.entity.EntityNotFoundException;
 import com.it.backend.mapper.SkillMapper;
@@ -82,5 +85,22 @@ public class SkillService {
             requests.add(request);
         }
         return requests;
+    }
+
+    public boolean existsBySpecialist(Specialist specialist, String skillName) {
+        for (SpecialistSkill specialistSkillsLevel : specialist.getSpecialistSkillsLevels()) {
+            if (specialistSkillsLevel.getSkill().getName().equals(skillName))
+                return true;
+        }
+        return false;
+    }
+
+    public Level getLevelBySpecialistSkill(Specialist specialist, String skill) {
+        for (SpecialistSkill specialistSkillsLevel : specialist.getSpecialistSkillsLevels()) {
+            if (specialistSkillsLevel.getSkill().getName().equals(skill)){
+                return specialistSkillsLevel.getLevel();
+            }
+        }
+        throw new EntityNotFoundException(String.format("skill.%s.for.specialist.with.position.%s.not.found", skill, specialist.getPosition().getName()), 0L);
     }
 }

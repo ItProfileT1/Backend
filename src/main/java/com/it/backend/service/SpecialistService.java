@@ -25,6 +25,7 @@ public class SpecialistService {
     private final PositionService positionService;
     private final SpecialistMapper specialistMapper;
     private final PositionMapper positionMapper;
+    private final SkillService skillService;
 
     @Transactional
     public ProfileResponse createProfile(ProfileRequest request, User user) {
@@ -71,21 +72,49 @@ public class SpecialistService {
         throw new EntityNotFoundException("specialist.not.found", specialist.getId());
     }
 
-    public Set<ProfileResponse> findByPosition(String positionName) {
-        Iterable<Specialist> specialists;
+    public Iterable<Specialist> findByPosition(String positionName) {
         if (positionName == null) {
-            specialists = specialistRepository.findAll();
-        } else {
-            specialists = positionService.findPositionByName(positionName).getSpecialists();
+            return specialistRepository.findAll();
         }
-        Set<ProfileResponse> profileResponses = new HashSet<>();
-        for (Specialist specialist : specialists) {
-            profileResponses.add(getProfileBySpecialist(specialist));
-        }
-        return profileResponses;
+        return positionService.findPositionByName(positionName).getSpecialists();
     }
 
     public ProfileResponse getProfileById(Long id) {
         return getProfileBySpecialist(findById(id));
+    }
+
+    public Iterable<Specialist> findByPositionSkill(String position, String skill) {
+        var specialists = findByPosition(position);
+        if (skill == null){
+            return specialists;
+        }
+        Set<Specialist> filteredSpecialists = new HashSet<>();
+        for (Specialist specialist : specialists) {
+            if (skillService.existsBySpecialist(specialist, skill)){
+                filteredSpecialists.add(specialist);
+            }
+        }
+        return filteredSpecialists;
+    }
+
+    public Set<ProfileResponse> findByPositionSkillLevel(String position, String skill, Integer levelValue){
+        var specialists = findByPositionSkill(position, skill);
+        Set<Specialist> filteredSpecialists = new HashSet<>();
+        if (levelValue == null){
+            specialists.forEach(filteredSpecialists::add);
+        }
+        else {
+            for (Specialist specialist : specialists) {
+                var levelBySkill = skillService.getLevelBySpecialistSkill(specialist, skill);
+                if (levelBySkill.getNumericValue() >= levelValue){
+                    filteredSpecialists.add(specialist);
+                }
+            }
+        }
+        Set<ProfileResponse> profileResponses = new HashSet<>();
+        for (Specialist specialist : filteredSpecialists) {
+            profileResponses.add(getProfileBySpecialist(specialist));
+        }
+        return profileResponses;
     }
 }

@@ -39,11 +39,22 @@ public class SpecialistController {
     }
 
     @GetMapping
-    @Operation(summary = "Получение специалистов с определенной должностью, доступно только администратору и p2p сервису")
+    @Operation(summary = "Получение специалистов с определенной должностью, доступно p2p сервису")
     @PreAuthorize("hasAnyRole('P2P', 'ADMIN', 'MASTER')")
-    public Set<ProfileResponse> findAllProfilesByPosition(@RequestParam(required = false) String position) {
-        return specialistService.findByPosition(position);
+    public Set<ProfileResponse> findAllProfilesByPosition(
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String skill,
+            @RequestParam(required = false) Integer level
+    ) {
+        return specialistService.findByPositionSkillLevel(position, skill, level);
     }
+
+//    @GetMapping
+//    @Operation(summary = "Получение специалистов по ключевому слову, доступно p2p сервису")
+//    @PreAuthorize("hasAnyRole('P2P', 'ADMIN', 'MASTER')")
+//    public Set<ProfileResponse> findByKeyWord(@RequestParam String search){
+//        return specialistService.findByKeyWord(search);
+//    }
 
     @GetMapping("{id}")
     @Operation(summary = "Получение специалиста по айди, доступно только администратору и p2p сервису")
