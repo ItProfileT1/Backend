@@ -21,7 +21,7 @@ public class TechRadarController {
     private final TechRadarService techRadarService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'MASTER')")
+    @PreAuthorize("hasAnyRole('USER', 'MASTER', 'ADMIN')")
     @Operation(summary = "Получение техрадара, доступно специалисту и руководителю")
     public Set<TechnologyPayloadResponse> getTechRadar(){
         return techRadarService.getTechRadar();
