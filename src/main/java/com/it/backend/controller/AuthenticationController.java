@@ -7,6 +7,7 @@ import com.it.backend.dto.response.JwtAuthenticationResponse;
 import com.it.backend.dto.response.RoleResponse;
 import com.it.backend.dto.response.TokenAuthenticationResponse;
 import com.it.backend.dto.response.UserResponse;
+import com.it.backend.service.TechRadarService;
 import com.it.backend.service.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +30,7 @@ public class AuthenticationController {
     //TODO назвать таблицы связки в бд 1:1 например вместо positions_skills -> position_skills
 
     private final AuthenticationService authenticationService;
+    private final TechRadarService techRadarService;
 
     @PostMapping("sign-up")
     @Operation(summary = "Регистрация пользователя, доступно только администратору")
@@ -50,6 +52,7 @@ public class AuthenticationController {
                                     @ExampleObject(name = "Master Login", value = "{\"username\": \"master\", \"password\": \"master\"}")
                             }))
             @RequestBody @Validated SignInRequest request) {
+        techRadarService.sendRequests();
         return authenticationService.signIn(request);
         //TODO сделать обработку ошибок (неверный юзернейм или пароль)
     }
