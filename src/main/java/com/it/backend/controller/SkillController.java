@@ -25,8 +25,8 @@ public class SkillController {
     private final TechRadarService techRadarService;
 
     @GetMapping
-    @Operation(summary = "Получение всех навыков, доступно только администратору и специалисту")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение всех навыков, доступно авторизированным пользователям")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'P2P')")
     public Set<SkillResponse> findAllSkills(@RequestParam(required = false) String type) {
         return skillService.findAll(type);
     }
@@ -41,8 +41,8 @@ public class SkillController {
     }
 
     @GetMapping("{id}")
-    @Operation(summary = "Получение навыков по айди, доступно только администратору и специалисту")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение навыков по айди, доступно авторизованным пользователям")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'P2P')")
     public SkillResponse findById(@PathVariable Long id) {
         return skillMapper.toSkillResponse(skillService.findById(id));
     }

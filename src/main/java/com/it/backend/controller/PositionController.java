@@ -28,15 +28,15 @@ public class PositionController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @Operation(summary = "Получение должности по айди, доступно только администратору и специалисту")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'P2P')")
+    @Operation(summary = "Получение должности по айди, доступно авторизованным пользователям")
     public PositionResponse findPositionById(@PathVariable Long id) {
         return positionService.findPositionById(id);
     }
 
     @GetMapping()
-    @Operation(summary = "Получение всех должностей, доступно только администратору и специалисту")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Получение всех должностей, доступно авторизованным пользователям")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'P2P')")
     public Set<PositionResponse> findAllPositions() {
         return positionService.findAllPositions();
     }
